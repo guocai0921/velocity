@@ -1,0 +1,102 @@
+package ${table.getServiceImplPackage()};
+
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Service;
+import com.sgai.core.base.service.impl.BaseCRUDService;
+import ${table.getJavaMapperPackage()}.${table.getEntityName()}Mapper;
+import ${table.getEntityPackage()}.${table.getEntityName()};
+import ${table.getServicePackage()}.${table.getEntityName()}Service;
+
+/**
+ * ${table.getEntityName()}ServiceImpl ${table.getTableDesc()}
+ * @author ${Author}
+ * @version ${Version}
+ * @date ${Date}
+ */
+ 
+ @Service
+public class ${table.getEntityName()}ServiceImpl extends BaseCRUDService<${table.getEntityName()}> implements ${table.getEntityName()}Service {
+	 private static final Log logger = LogFactory.getLog(${table.getEntityName()}ServiceImpl.class);
+	 @Autowired
+	 private ${table.getEntityName()}Mapper ${table.getFirstLetterLowerEntityName()}Mapper;
+	 /**
+	  * 查询整树
+	  */
+	 public List<${table.getEntityName()}> findTree(Map<String,Object> params) {
+		 List<${table.getEntityName()}>  allNodes = ${table.getFirstLetterLowerEntityName()}Mapper.findTree(params);
+		 return arrangeNodes(allNodes);
+	 }
+	 
+	 /**
+	 * 将平级的菜单数据转换成树结构数据
+	 * @param allNodes
+	 * @return
+	 */
+	private List<${table.getEntityName()}> arrangeNodes( List<${table.getEntityName()}> allNodes) {
+		List<${table.getEntityName()}> ${table.getFirstLetterLowerEntityName()}s = new ArrayList<${table.getEntityName()}>();
+		for (int i=0;i<allNodes.size();i++) {
+			${table.getEntityName()} ${table.getFirstLetterLowerEntityName()} = allNodes.get(i);
+			if (!${table.getFirstLetterLowerEntityName()}.isConnected()) {
+				${table.getFirstLetterLowerEntityName()}.setConnected(true);//此属性用于标记该菜单已经被加入树形结构
+				if (hasChildrens(${table.getFirstLetterLowerEntityName()}.getSid(), allNodes)) {
+					${table.getFirstLetterLowerEntityName()}.setLeaf(false);
+					${table.getFirstLetterLowerEntityName()}.setIconCls("grouping");
+					recursivelyFindChildrens(${table.getFirstLetterLowerEntityName()}, allNodes);
+				} else {
+					${table.getFirstLetterLowerEntityName()}.setIconCls("menupage");
+					${table.getFirstLetterLowerEntityName()}.setLeaf(true);
+				}
+				${table.getFirstLetterLowerEntityName()}s.add(${table.getFirstLetterLowerEntityName()});
+			}
+		}
+		return ${table.getFirstLetterLowerEntityName()}s;
+	}
+	
+	/**
+	 * 递归处理子菜单
+	 * @param ${table.getFirstLetterLowerEntityName()}
+	 * @param allNodes
+	 */
+	private void recursivelyFindChildrens(${table.getEntityName()} ${table.getFirstLetterLowerEntityName()}, List<${table.getEntityName()}> allNodes) {
+		for (int i=0;i<allNodes.size();i++) {
+			${table.getEntityName()} ${table.getFirstLetterLowerEntityName()}Temp = allNodes.get(i);
+			if (${table.getFirstLetterLowerEntityName()}.getSid().toString().equals(${table.getFirstLetterLowerEntityName()}Temp.getParentSid().toString())) {
+				if (!${table.getFirstLetterLowerEntityName()}Temp.isConnected()) {
+					${table.getFirstLetterLowerEntityName()}Temp.setConnected(true);
+					if (hasChildrens(${table.getFirstLetterLowerEntityName()}Temp.getSid(), allNodes)) {
+						${table.getFirstLetterLowerEntityName()}Temp.setLeaf(false);
+						${table.getFirstLetterLowerEntityName()}Temp.setIconCls("grouping");
+						recursivelyFindChildrens(${table.getFirstLetterLowerEntityName()}Temp, allNodes);
+					} else {
+						${table.getFirstLetterLowerEntityName()}Temp.setLeaf(true);
+						${table.getFirstLetterLowerEntityName()}Temp.setIconCls("menupage");
+					}
+					${table.getFirstLetterLowerEntityName()}.getItems().add(${table.getFirstLetterLowerEntityName()}Temp);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 判断是否有子菜单
+	 * @param parentSid
+	 * @param allNodes
+	 * @return
+	 */
+	private boolean hasChildrens(Long parentSid, List<${table.getEntityName()}> allNodes) {
+		boolean hasChildrens = false;
+		for(${table.getEntityName()} ${table.getFirstLetterLowerEntityName()}:allNodes){
+			if (${table.getFirstLetterLowerEntityName()}.getParentSid().toString().equals(parentSid.toString())) {
+				hasChildrens = true;
+				break;
+			}
+		}
+		return hasChildrens;
+	}
+	
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<!--
+	@author ${Author}
+ 	@version ${Version}
+ 	@date ${Date}
+-->
+<generatorConfiguration>
+	<properties resource="jdbc.properties" />
+	<!--根据本地环境修改此文件路径 -->
+	<classPathEntry location="C:/Users/snoopie/.m2/repository/com/oracle/ojdbc6/11.2.0.4/ojdbc6-11.2.0.4.jar"/>
+	<classPathEntry location="D:\qsjhq\core-service\target\classes"/>
+	<context id="mybatis3" targetRuntime="MyBatis3">
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+			<property name="suppressDate" value="false" />
+		</commentGenerator>
+		
+		<jdbcConnection driverClass="${jdbc.driverClassName}"
+			connectionURL="${jdbc.url}" userId="${jdbc.username}"
+			password="${jdbc.password}">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="abator" targetProject="mes-dtm-app/src/main/java/">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="false" />
+			<property name="rootClasspath"  value="D:\qsjhq\core-service/target/classes" />
+			<property name="rootClass" value="com.sgai.core.entity.AbstractEntity" />
+		</javaModelGenerator>
+		
+		<sqlMapGenerator targetPackage="abator" targetProject="mes-dtm-app/src/main/resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		
+#foreach( $table in $tables)
+		<table tableName="${table.getTableName()}" domainObjectName="${table.getEntityName()}"	    
+			enableDeleteByExample="false"  enableSelectByExample="false"  enableCountByExample="false" 
+			enableUpdateByExample="false"  enableUpdateByPrimaryKey="false">
+			<generatedKey column="SID" sqlStatement="SELECT ${table.getSequenceName()}.NEXTVAL FROM DUAL"/>
+		</table>
+#end
+	</context>
+</generatorConfiguration>

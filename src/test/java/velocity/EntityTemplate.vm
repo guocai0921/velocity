@@ -1,0 +1,57 @@
+package ${table.getEntityPackage()};
+
+import java.util.Date;
+import java.math.BigDecimal;
+import com.sgai.core.base.entity.AbstractEntity;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/**
+ * ${table.getEntityName()} ${table.getTableDesc()}
+ * [table="${table.tableName}" | type="${table.tableType}]"
+ * @author ${Author}
+ * @version ${Version}
+ * @date ${Date}
+ */
+public class ${table.getEntityName()} extends AbstractEntity {
+	private static Log logger = LogFactory.getLog(${table.getEntityName()} .class);
+	
+#foreach( $column in $table.getColumns())
+#if(!$column.isExcludeFiled())
+	/**
+	 * $column.getColumnDesc()
+	 */
+	private $column.getFieldJavaType() $column.getFieldName();
+	
+#end
+#end
+#foreach( $column in $table.getColumns())
+#if(!$column.isExcludeFiled())
+	/**
+	 * 获取$column.getColumnDesc()
+	 * @return $column.getFieldJavaType()
+	*/
+	public $column.getFieldJavaType() get$column.getFirstLetterUpperFieldName()() {
+		return $column.getFieldName();
+	}
+	
+	/**
+	 * 设置$column.getColumnDesc()
+	 * @param $column.getFieldName()
+	*/
+	public void set$column.getFirstLetterUpperFieldName()($column.getFieldJavaType() $column.getFieldName()) {
+		this.$column.getFieldName() = $column.getFieldName();
+	}
+	
+#end
+#end
+	@Override
+	public String toString() {
+		StringBuffer sb =new StringBuffer();
+		sb.append("${table.getEntityName()}对象详细信息:" + "\n");
+#foreach( $column in $table.getColumns())
+		sb.append("${column.getFieldName()}:" + this.get${column.getFirstLetterUpperFieldName()}()+ "\n");
+#end
+		return sb.toString();
+	}
+}

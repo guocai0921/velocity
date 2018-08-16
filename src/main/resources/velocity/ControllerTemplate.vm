@@ -1,0 +1,28 @@
+package ${table.getControllerPackage()};
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.sgai.core.base.controller.BaseController;
+import ${table.getEntityPackage()}.${table.getEntityName()};
+import ${table.getServicePackage()}.${table.getEntityName()}Service;
+
+/**
+ * ${table.getEntityName()}Controller ${table.getTableDesc()}
+ * @author ${Author}
+ * @version ${Version}
+ * @date ${Date}
+ */
+@RestController
+@Scope("prototype")
+@RequestMapping("/${table.getModuleName()}/${table.getStrutsActionAlias()}")
+public class ${table.getEntityName()}Controller extends BaseController<${table.getEntityName()}> {
+	@SuppressWarnings("unused")
+	private static Log logger = LogFactory.getLog(${table.getEntityName()}Controller.class);
+	@Autowired
+    private ${table.getEntityName()}Service ${table.getFirstLetterLowerEntityName()}Service;
+}

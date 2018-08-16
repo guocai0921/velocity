@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.guocai.mp.mybatis.mapper.TableMapper" >
+    <resultMap id="TableResultMap" type="com.guocai.mp.mybatis.entity.Table" >
+        <result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR" />
+        <result column="TABLE_DESC" property="tableDesc" jdbcType="VARCHAR" />
+        <result column="TABLE_TYPE" property="tableType" jdbcType="VARCHAR" />
+        <association property="columns" column="TABLE_NAME" select="findTableColumns"/>
+    </resultMap>
+
+    <resultMap id="ColumnResultMap" type="com.guocai.mp.mybatis.entity.Column" >
+        <result column="COLUMN_NAME" property="columnName" jdbcType="VARCHAR" />
+        <result property="COLUMN_DESC" column="columnDesc"  jdbcType="VARCHAR"/>
+        <result property="DATA_TYPE" column="dataType"  jdbcType="VARCHAR"/>
+        <result property="DATA_PRECISION" column="dataPrecision"  jdbcType="DECIMAL"/>
+        <result property="DATA_SCALE" column="dataScale"  jdbcType="DECIMAL"/>
+        <result property="NULL_FLAG" column="nullFlag"  jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getTablesByPrefix" resultMap="TableResultMap" parameterType="java.util.Map" >
+        select * from
+        (select t.table_name, com.comments as table_desc, com.table_type
+        from user_tables t, user_tab_comments com
+        where t.TABLE_NAME= com.table_name
+        union all
+        SELECT v.VIEW_NAME as table_name, com.comments, com.table_type
+        FROM USER_VIEWS v,  user_tab_comments com
+        where v.VIEW_NAME= com.TABLE_NAME )
+        where 1=1
+        <if test="tablePrefix != null" >
+            and  TABLE_NAME like '' || #{tablePrefix} || '%'
+        </if>
+        <if test="tableName != null" >
+            and  TABLE_NAME = #{tableName}
+        </if>
+    </select>
+
+    <select id="findTableColumns" resultMap="ColumnResultMap">
+        select col.COLUMN_NAME, com.COMMENTS as COLUMN_DESC, col.DATA_TYPE, col.DATA_PRECISION, col.DATA_SCALE, col.NULLABLE as NULL_FLAG
+        from user_tab_columns col, user_col_comments com
+        WHERE col.TABLE_NAME= com.table_name
+        and col.COLUMN_NAME = com.column_name
+        and col.TABLE_NAME= #{tableName,jdbcType=VARCHAR}
+        order by col.COLUMN_ID
+    </select>
+
+</mapper>

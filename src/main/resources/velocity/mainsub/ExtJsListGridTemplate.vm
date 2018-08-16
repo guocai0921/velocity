@@ -1,0 +1,137 @@
+Ext.define('Sgai.view.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}ListGrid', {
+	extend:'Ext.grid.Panel',
+	alias:'widget.${mainTable.getFirstLetterLowerEntityName()}ListGrid',
+	layout:'fit', 
+	reference:'${mainTable.getFirstLetterLowerEntityName()}ListGrid',
+    region:'center',
+    autoScroll:true,   
+    columnLines:true,
+    border:0,
+    collapsible:true,
+    title: translations.dataList,
+    iconCls:'data',
+    
+    store:Ext.create('Sgai.store.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}Store',{storeId:'${mainTable.getFirstLetterLowerEntityName()}Store'}),
+	
+    selModel:{
+		//键盘导航， false则键盘操作无效
+		enableKeyNav:true, 
+		//选择模式 SINGLE, SIMPLE, 和 MULTI
+		mode:'SINGLE', 
+		//点击checkbox框选中
+		checkOnly: false, 
+		//在表头显示全选checkbox框
+		showHeaderCheckbox: false,
+		//复选框选择模式Ext.selection.CheckboxModel
+		selType:'checkboxmodel',
+		allowDeselect:false
+	},
+	
+    tbar:[            	
+    	{
+        	xtype:'button',
+        	text:translations.query,
+        	reference:'${mainTable.getFirstLetterLowerEntityName()}QueryBtn',
+        	iconCls:'find',
+        	handler:'${mainTable.getFirstLetterLowerEntityName()}QueryBtnClick'
+        },
+        {
+         	xtype:'button',
+        	text:translations.reset,
+        	reference:'${mainTable.getFirstLetterLowerEntityName()}ResetBtn',
+        	iconCls:'reset',
+        	handler:'${mainTable.getFirstLetterLowerEntityName()}ResetBtnClick'
+        },
+        '-',
+        {
+        	xtype:'button',
+        	text:translations.add,
+        	reference:'${mainTable.getFirstLetterLowerEntityName()}AddBtn',
+        	iconCls:'add',
+        	//privilegeCode:'UA011001',
+        	handler:'${mainTable.getFirstLetterLowerEntityName()}AddBtnClick'
+        },
+        {
+         	xtype:'button',
+        	text:translations.update,
+        	formBind:true,
+        	reference:'${mainTable.getFirstLetterLowerEntityName()}EditBtn',
+        	iconCls:'edit',
+        	//privilegeCode:'UA011002',
+        	handler:'${mainTable.getFirstLetterLowerEntityName()}EditBtnClick',
+        	disabled:false       	
+        },
+        {
+         	xtype:'button',
+        	text:translations.del,
+        	formBind:true,
+        	reference:'${mainTable.getFirstLetterLowerEntityName()}DeleteBtn',
+        	iconCls:'delete',
+        	//privilegeCode:'UA011003',
+        	handler:'${mainTable.getFirstLetterLowerEntityName()}DeleteBtnClick',
+        	disabled:false       	
+        }
+    ],
+    
+	listeners : {
+		selectionchange:'${mainTable.getFirstLetterLowerEntityName()}SelectionChange'
+	},
+	
+    viewConfig:{
+		forceFit: true,
+	 	scrollOffset: 0,
+		enableTextSelection:true
+	},
+	
+	plugins:[
+		{
+			ptype: 'gridfilters'
+		},
+		{
+			ptype:'gridHeaderAdjust',
+			aliasName:'${mainTable.getFirstLetterLowerEntityName()}ListGrid${mainTable.getRandomNumber()}'
+		}
+	],
+	
+	columns: [
+    	{
+            xtype: 'rownumberer',
+            itemId:'rownumberer',
+            width:50,
+            align:'center',
+            text:translations.rowNumber
+        },
+#set($columnCount=1)
+#foreach( $column in $mainTable.getColumns())
+		{
+			text:bizI18n.${mainTable.getFirstLetterLowerModuleEntityName()}.${column.getFieldName()},
+			filter:'list',
+#if($column.getFieldExtJsType()=="date")
+			xtype:'datecolumn',
+			format :'Y-m-d H:i:s',
+#end
+			dataIndex:'${column.getFieldName()}'#if($column.isExcludeFiled()),#end			
+#if($column.isExcludeFiled())
+
+			hidden:true
+#else
+
+#end
+		}#if(${columnCount}<${mainTable.getColumns().size()}),#end
+
+#set($columnCount = ${columnCount} + 1)
+#end     
+    ],
+    dockedItems:[
+       {
+			xtype:'pagingtoolbar',
+			store:'${mainTable.getFirstLetterLowerEntityName()}Store',
+			dock:'bottom',
+			displayInfo:true,
+			plugins:[{
+				ptype:'pagingtoolbarresizer'
+			   }
+			]
+       }
+   ]
+});

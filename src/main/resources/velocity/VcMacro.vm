@@ -1,0 +1,142 @@
+#*
+you can write new or rewrite the flow macros in you owne vm file,they will work well.
+the $v is default reference in you *.vm file.
+further more, you can enhance func by 
+add you own util write in pure java language to the velocity context.
+for example VelocityUtil.java MathUtil.java and so on.
+ROUND():	对$v取整数
+ROUND2($scal) 对$v四舍五入,$scal为保留的小数点位数
+TRIM():   去除$v的前后空格 
+GET($map,key)：从$map中取key的值
+MULT($d1,d2)：乘法       
+POWER10($n):   	v的10n次方
+TRUNC($n):  		从左向右截取n位
+ABS() $v取绝对值
+DECODE ($codeLib) 对$v 解码,$codeLib为源码和目标码的对应规则，源码与目标码以':'分隔,码对之间一','分隔
+*#
+##get value from $object(for map, $s is key ;for object, $s is null)
+#macro (GET $object,$s)
+#if($object.get($s.toString().trim())) 
+#set($v=$object.get($s.toString().trim()))
+#else
+#set($v="")
+#end
+#end
+
+##get value from $object(for map, $s is key ;for object, $s is null)
+#macro (GET0 $object,$s)
+#if($object.get($s.toString().trim())) 
+#if($object.get($s.toString().trim())!="")
+#set($v=$object.get($s.toString().trim()))
+#else
+#set($v="0")
+#end
+#else
+#set($v="0")
+#end
+#end
+
+## int(X) the 'x' bit to leave
+#macro (TRUNC $bit)
+#set($l = $v.toString().length())
+#if($l > $bit)
+#set($l = $bit) 
+#end
+#set($v = $v.toString().substring(0, $l))
+#end
+
+## trim start-end blank
+#macro (TRIM)
+#if($v)
+#set($v = $v.toString().trim())
+#end
+#end
+
+## multiply $v with 1.0E$bit ,be sure mathUtil in current vccontext 
+#macro (POWER10 $bit)
+#if($v)
+#set($v = $velocityUtil.power($v.toString(),$bit))
+#end
+#end
+
+
+## multiply two double value,be sure mathUtil in current vccontext 
+#macro (MULT $d1,$d2)
+#set($v=$velocityUtil.multiply($d1,$d2))
+#end
+
+## round $v
+#macro (ROUND)
+#set($v = $velocityUtil.round($v,0))
+#set($pos_dot = $v.toString().indexOf("."))
+#if($pos_dot == -1)
+#set($v = $v)
+#else
+#set($v=$v.toString().substring(0,$pos_dot))
+#end
+#end
+
+## return the  absolute  value of $v
+#macro(ABS)
+#set($post_min=$v.toString().indexOf("-"))
+#set($l = $v.toString().length())
+#if($post_min==-1)
+#elseif($post_min==0)
+#set($v = $v.toString().substring(1, $l))
+#else
+#end
+#end
+
+##decode $v by $codeLib
+#macro (DECODE $codeLib)
+#set($v=$velocityUtil.decode($v,$codeLib))
+#end
+
+## round $v,$scal the bit that behind of pot
+#macro(ROUND2 $scal)
+#set($v = $velocityUtil.round($v,$scal))
+#end
+
+## get the val of the obj[path]
+#macro(ATTR $obj,$path)
+#set($v = '')
+#set($v = $obj.getAttribute($path))
+#set($v = $velocityUtil.conStr($v))
+#end
+
+## get the parobj of the obj[path]
+#macro(PAR $obj,$path)
+#set($v = '')
+#set($v = $obj.getBizParameter($path))
+#set($v = $velocityUtil.conStr($v))
+#end
+
+#macro(NVL $obj1,$obj2)
+#set($v = '')
+#if("null" == $obj1 || "" == $obj1)
+#set($v = $obj2)
+#else
+#set($v = $obj1)
+#end
+#end
+
+#macro(ctxComp $ctx,$path)
+#if($path == 'NEX')
+#set($v = '')
+#else
+#set($v = $velocityUtil.ctxComp($ctx,$path))
+#end
+#if($v == 'NEX')
+#set($v = '')
+#end
+#end
+
+## return the list next index for current index of list
+#macro(getNextT $list, $curT)
+#set($i = $list.indexOf($curT))
+#if($velocityUtil.plus2($i, 1) == $list.size())
+#set($v = "")
+#else
+#set($v = $list.get($velocityUtil.plus2($i, 1)))
+#end
+#end

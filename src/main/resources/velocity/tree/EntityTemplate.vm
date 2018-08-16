@@ -1,0 +1,131 @@
+package ${table.getEntityPackage()};
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
+import java.math.BigDecimal;
+import com.sgai.core.entity.AbstractEntity;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/**
+ * ${table.getEntityName()} ${table.getTableDesc()}
+ * [table="${table.tableName}" | type="${table.tableType}]"
+ * @author ${Author}
+ * @version ${Version}
+ * @date ${Date}
+ */
+public class ${table.getEntityName()} extends AbstractEntity {
+	private static Log logger = LogFactory.getLog(${table.getEntityName()} .class);
+	
+#foreach( $column in $table.getColumns())
+#if(!$column.isExcludeFiled())
+	/**
+	 * $column.getColumnDesc()
+	 */
+	private $column.getFieldJavaType() $column.getFieldName();
+	
+#end
+#end
+	/**
+	 * 是否叶子节点
+	 */
+	private boolean leaf;
+    /**
+     * 图标Cls名称
+     */
+    private String iconCls;
+    /**
+     * 是否已排序
+     */
+    private boolean isConnected;
+	/**
+	 * 子节点集
+	 */
+    private List<${table.getEntityName()}> items = new ArrayList<${table.getEntityName()}>();
+#foreach( $column in $table.getColumns())
+#if(!$column.isExcludeFiled())
+	/**
+	 * 获取$column.getColumnDesc()
+	 * @return $column.getFieldJavaType()
+	*/
+	public $column.getFieldJavaType() get$column.getFirstLetterUpperFieldName()() {
+		return $column.getFieldName();
+	}
+	
+	/**
+	 * 设置$column.getColumnDesc()
+	 * @param $column.getFieldName()
+	*/
+	public void set$column.getFirstLetterUpperFieldName()($column.getFieldJavaType() $column.getFieldName()) {
+		this.$column.getFieldName() = $column.getFieldName();
+	}
+	
+#end
+#end
+	/**
+	 * 获取是否叶子节点
+	 * @return
+	 */
+	public boolean isLeaf() {
+		return leaf;
+	}
+	/**
+	 * 设置是否叶子节点
+	 * @param leaf
+	 */
+	public void setLeaf(boolean leaf) {
+		this.leaf = leaf;
+	}
+	/**
+	 * 获取图标Cls
+	 * @return
+	 */
+	public String getIconCls() {
+		return iconCls;
+	}
+	/**
+	 * 设置图标Cls
+	 * @param iconCls
+	 */
+	public void setIconCls(String iconCls) {
+		this.iconCls = iconCls;
+	}
+	/**
+	 * 获取是否已排序
+	 * @return
+	 */
+	public boolean isConnected() {
+		return isConnected;
+	}
+	/**
+	 * 设置是否已排序
+	 * @param isConnected
+	 */
+	public void setConnected(boolean isConnected) {
+		this.isConnected = isConnected;
+	}
+	/**
+	 * 获取子节点集
+	 * @return
+	 */
+	public List<${table.getEntityName()}> getItems() {
+		return items;
+	}
+	/**
+	 * 设置子节点集
+	 * @param items
+	 */
+	public void setItems(List<${table.getEntityName()}> items) {
+		this.items = items;
+	}
+	@Override
+	public String toString() {
+		StringBuffer sb =new StringBuffer();
+		sb.append("${table.getEntityName()}对象详细信息:" + "\n");
+#foreach( $column in $table.getColumns())
+		sb.append("${column.getFieldName()}:" + this.get${column.getFirstLetterUpperFieldName()}()+ "\n");
+#end
+		return sb.toString();
+	}
+}

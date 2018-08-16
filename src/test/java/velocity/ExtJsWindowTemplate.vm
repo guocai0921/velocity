@@ -1,0 +1,96 @@
+Ext.define('Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Win',
+{
+    extend:'Ext.window.Window',
+    alias:'widget.${table.getFirstLetterLowerEntityName()}Window',
+    
+    controller:'${table.getFirstLetterLowerEntityName()}WinCtrl',
+
+    title:'$table.getTableDesc()',
+    resizable:false,
+    closable:true,
+    layout:'fit',
+    plain:true,
+    modal:true,
+    constrainHeader:true,
+    width:675,
+	height:500,
+	
+    listeners:{
+	},
+	
+    items:[
+       {
+    	   	xtype: 'form',
+    	   	bodyPadding:'5 5 0',
+    	   	width: 650,
+    	   	frame:true, 
+    	   	reference:'${table.getFirstLetterLowerEntityName()}EditForm',
+    	   	region:'center',
+    	   	fieldDefaults:{
+	           labelAlign:'right',
+	           labelWidth:80,
+	           msgTarget:'tip',
+	           emptyText:'不能为空',
+	           width:250
+	       	},
+	     	layout:'vbox',
+	       	items: [
+	       		{
+					title:'$table.getTableDesc()',
+					xtype : 'fieldset',
+					width:625,
+					collapsible : true,
+					layout: {
+					   type: 'table',
+					   columns: 2
+			       	},
+			       	flex:5,
+			       	scrollable: true,
+					items:[
+#set($columnCount=${table.getColumns().size()} - 6)
+#set($count=1)
+#foreach( $column in $table.getColumns())
+#if(!$column.isExcludeFiled())	
+						{
+							xtype:'textfield',
+							name:'${column.getFieldName()}',
+							reference:'${column.getFieldName()}',
+							fieldLabel:bizI18n.${table.getFirstLetterLowerModuleEntityName()}.${column.getFieldName()},
+#if(!$column.isNullable())							
+							allowBlank:false
+#end
+						}#if(${count}<$columnCount),#end
+
+#set($count = ${count} + 1)
+#end
+#end
+
+					]
+				},
+				{
+					xtype:'hidden',
+					name: 'version',
+					value:'1',
+					reference:'version'
+				},
+				{
+					xtype:'hidden',
+					name: 'sid',
+					reference:'sid'
+				}
+			],
+	       	buttons: [
+				'->', 
+				{
+				    text: '提交',
+				    handler:'${table.getFirstLetterLowerEntityName()}WinSubmit',
+				    formBind:true
+				}, 
+				{
+				    text: '关闭',
+				    handler:'${table.getFirstLetterLowerEntityName()}WinClose'
+				}
+	        ]
+       	}
+    ]
+});

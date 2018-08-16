@@ -1,0 +1,17 @@
+package ${table.getJavaMapperPackage()};
+
+import com.sgai.core.base.mapper.BaseMapper;
+import com.sgai.core.base.repository.BaseRepository;
+import ${table.getEntityPackage()}.${table.getEntityName()};
+
+/**
+ * ${table.getEntityName()}Mapper ${table.getTableDesc()}
+ * @author ${Author}
+ * @version ${Version}
+ * @date ${Date}
+ */
+ 
+@BaseRepository
+public interface ${table.getEntityName()}Mapper extends BaseMapper<${table.getEntityName()}> {
+
+}

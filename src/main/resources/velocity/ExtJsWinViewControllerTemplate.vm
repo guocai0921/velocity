@@ -1,0 +1,49 @@
+Ext.define('Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}WinController', {
+	extend: 'Ext.app.ViewController',
+	alias: 'controller.${table.getFirstLetterLowerEntityName()}WinCtrl',
+	
+	/**
+	 * 提交数据
+	 * @param {} button
+	 * @param {} evt
+	 */
+	${table.getFirstLetterLowerEntityName()}WinSubmit:function(button, evt) {
+		var win = this;
+		var form = this.lookupReference('${table.getFirstLetterLowerEntityName()}EditForm');
+		var params = Sgai.util.Util.getFormParams(form);
+		
+		//TODO 此处可增加特殊校验编码
+		
+		Ext.Msg.confirm (
+			'操作提示',
+			'确认提交数据？',
+            function (btn)  {
+                if (btn == 'no') {
+                	 return;
+                } else {
+					if (win.getView().operate=='add') {						
+						params.delFlag=0;
+						var url = "${table.getModuleName()}/${table.getStrutsActionAlias()}/add.action";
+					} else {
+						var url = "${table.getModuleName()}/${table.getStrutsActionAlias()}/update.action";
+					}
+					var jsonData = Ext.JSON.encode(params);
+					Sgai.util.Util.postAjaxRequestByJsonData(url, jsonData, true, function(){
+						var parent = win.getView().ctrl;
+						var parentGrid = parent.lookupReference('${table.getFirstLetterLowerEntityName()}ListGrid');						
+						parentGrid.getStore().reload();
+						win.closeView();
+					}, function(){}, button);
+                }
+		   }
+      )
+	},
+	/**
+	 * 关闭窗口
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${table.getFirstLetterLowerEntityName()}WinClose:function(btn, evt) {
+		this.closeView();
+	}
+});

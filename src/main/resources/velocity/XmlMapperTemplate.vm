@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+${table.getTableDesc()}[${table.getTableName()}|${table.getTableType()}]
+@author ${Author}
+@version ${Version}
+@date ${Date}
+-->
+<mapper namespace="${table.getXmlMapperPackage()}.${table.getEntityName()}Mapper" >
+
+	<resultMap id="BaseResultMap" type="${table.getEntityPackage()}.${table.getEntityName()}" >
+#foreach( $column in $table.getColumns())
+#if(${column.getColumnName()}=="SID")  
+		<!-- $column.getColumnDesc() -->
+		<id column="SID" property="sid" jdbcType="DECIMAL" />
+#elseif(!${column.isBigColumn()})
+		<!-- $column.getColumnDesc() -->
+		<result column="${column.getColumnName()}" property="${column.getFieldName()}" jdbcType="${column.getFieldMybatisType()}" />
+#end
+#end
+	</resultMap>
+  
+#if(${table.hasBigColumn()})
+	<resultMap id="ResultMapWithBLOBs" type="${table.getEntityPackage()}.${table.getEntityName()}" extends="BaseResultMap" >
+#foreach( $column in $table.getColumns())
+#if(${column.isBigColumn()})
+		<!-- $column.getColumnDesc() -->
+		<result column="${column.getColumnName()}" property="${column.getFieldName()}" jdbcType="${column.getFieldMybatisType()}" />
+#end
+#end
+	</resultMap>
+#end
+ 
+	<sql id="Base_Column_List" >
+#set($columnCount=1)
+#foreach( $column in $table.getColumns())
+#if(!${column.isBigColumn()})
+		${column.getColumnName()}#if(${columnCount}<${table.getColumns().size()}),#end
+
+#end
+#set($columnCount = ${columnCount} + 1)
+#end
+	</sql>
+  
+	<sql id="Blob_Column_List" >
+#set($columnCount=1)
+#foreach( $column in $table.getColumns())
+#if(${column.isBigColumn()})
+		${column.getColumnName()}#if(${columnCount}<${table.getBigColumnCount()}),#end
+	
+#set($columnCount = ${columnCount} + 1)
+#end
+#end
+	</sql>
+
+#if($methodSwitch.enableFind)
+#if(!${table.hasBigColumn()})
+#set($resultMap = "BaseResultMap")
+#else
+#set($resultMap = "ResultMapWithBLOBs")
+#end  	
+	<select id="find" resultMap="${resultMap}" parameterType="java.util.Map">
+		select 
+    	<include refid="Base_Column_List" />
+#if(${table.hasBigColumn()})
+			,<include refid="Blob_Column_List" />
+#end
+		from ${table.getTableName()}
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+#foreach( $column in $table.getColumns())
+#if((!${column.isExcludeFiled()} || ${column.getColumnName()}=="SID" || ${column.getColumnName()}=="VERSION") && !${column.isBigColumn()})   	
+			<if test="${column.getFieldName()} != null" >
+				AND ${column.getColumnName()} = #{${column.getFieldName()},jdbcType=${column.getFieldMybatisType()}}
+			</if>
+#end
+#end
+		</trim>
+		ORDER BY 
+		<if test="order != null">  
+			${order}  
+		</if>
+		<if test="order == null">  
+			SID DESC
+		</if>
+	</select>
+#end
+#if($methodSwitch.enableDelete)
+	<delete id="delete" parameterType="${table.getEntityPackage()}.${table.getEntityName()}" >
+		delete from ${table.getTableName()}
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+#foreach( $column in $table.getColumns())
+#if((!${column.isExcludeFiled()} || ${column.getColumnName()}=="SID") && !${column.isBigColumn()})   	
+			<if test="${column.getFieldName()} != null" >
+				AND ${column.getColumnName()} = #{${column.getFieldName()},jdbcType=${column.getFieldMybatisType()}}
+			</if>
+#end
+#end
+		</trim>
+	</delete>
+#end  
+#if($methodSwitch.enableDeleteByPrimaryKey)
+	<delete id="deleteByPrimaryKey" parameterType="${table.getEntityPackage()}.${table.getEntityName()}" >
+		delete from ${table.getTableName()}
+		where SID = #{sid,jdbcType=DECIMAL}
+	</delete>
+#end 
+#if($methodSwitch.enableDeleteAll)
+	<delete id="deleteAll" parameterType="java.util.List" >
+		delete from ${table.getTableName()}
+		where sid in
+		<foreach collection="list" item = "model" open="(" separator="," close=")">#{ model.sid}  
+		</foreach>
+	</delete>
+#end
+#if($methodSwitch.enableDeleteAllByPrimaryKey)
+	<delete id="deleteAllByPrimaryKey" parameterType="java.util.List" >
+		delete from ${table.getTableName()}
+		where sid in
+		<foreach collection="list" item = "item" open="(" separator="," close=")">#{item}  
+		</foreach>
+	</delete>
+#end
+#if($methodSwitch.enableInsert)
+	<insert id="insert" parameterType="${table.getEntityPackage()}.${table.getEntityName()}" >
+		<selectKey resultType="java.lang.Long" keyProperty="sid" order="BEFORE" >
+			SELECT ${table.getSequenceName()}.nextval FROM DUAL
+		</selectKey>
+		insert into ${table.getTableName()} (
+#set($columnCount=1)
+#foreach( $column in $table.getColumns())
+			${column.getColumnName()}#if(${columnCount}<${table.getColumns().size()}),#end
+
+#set($columnCount = ${columnCount} + 1)
+#end
+		)
+		values (
+#set($columnCount=1)
+#foreach( $column in $table.getColumns())
+			#{${column.getFieldName()},jdbcType=${column.getFieldMybatisType()}}#if(${columnCount}<${table.getColumns().size()}),#end
+
+#set($columnCount = ${columnCount} + 1)
+#end
+		)
+	</insert>
+#end
+#if($methodSwitch.enableInsertAll) 
+	<insert id="insertAll" parameterType="java.util.List" >
+		<selectKey resultType="java.lang.Long" keyProperty="sid" order="BEFORE" >
+ 			SELECT ${table.getSequenceName()}.nextval FROM DUAL
+		</selectKey>
+		insert into ${table.getTableName()} (
+#set($columnCount=1)
+#foreach( $column in $table.getColumns())
+			${column.getColumnName()}#if(${columnCount}<${table.getColumns().size()}),#end
+
+#set($columnCount = ${columnCount} + 1)
+#end		
+		)
+		SELECT ${table.getSequenceName()}.nextval,A.* from( 
+		<foreach collection="list" item="item" index="index" separator="UNION ALL">
+			SELECT
+#set($columnCount=1)
+#foreach( $column in $table.getColumns())
+				#{${column.getFieldName()},jdbcType=${column.getFieldMybatisType()}}#if(${columnCount}<${table.getColumns().size()}),#end
+
+#set($columnCount = ${columnCount} + 1)
+#end
+			FROM DUAL
+		</foreach>
+		) A
+	</insert>
+#end
+#if($methodSwitch.enableUpdate)
+	<update id="update" parameterType="${table.getEntityPackage()}.${table.getEntityName()}" >
+		update ${table.getTableName()} set version = version + 1,
+		<trim suffixOverrides=",">
+#foreach( $column in $table.getColumns())
+#if((!${column.isExcludeFiled()} || ${column.getColumnName()}=="UPDATED_BY" || ${column.getColumnName()}=="UPDATED_TIMESTAMP") )   	
+			<if test="${column.getFieldName()} != null" >
+				${column.getColumnName()} = #{${column.getFieldName()},jdbcType=${column.getFieldMybatisType()}},
+			</if>
+#end
+#end
+		</trim>
+		where SID = #{sid,jdbcType=DECIMAL} and VERSION = #{version,jdbcType=DECIMAL}
+	</update>
+#end
+#if($methodSwitch.enableUpdateAll)
+	<update id="updateAll" parameterType="${table.getEntityPackage()}.${table.getEntityName()}" >
+		<foreach collection="list" item="item" index="index" separator="" open="begin" close="end;">
+			update ${table.getTableName()} set version = version + 1,
+			<trim suffixOverrides=",">
+#foreach( $column in $table.getColumns())
+#if((!${column.isExcludeFiled()} || ${column.getColumnName()}=="UPDATED_BY" || ${column.getColumnName()}=="UPDATED_TIMESTAMP") )   	
+				<if test="${column.getFieldName()} != null" >
+					${column.getColumnName()} = #{${column.getFieldName()},jdbcType=${column.getFieldMybatisType()}},
+				</if>
+#end
+#end
+			</trim>
+			where SID = #{item.sid,jdbcType=DECIMAL};
+		</foreach>
+	</update>
+#end
+</mapper>

@@ -1,0 +1,19 @@
+Ext.define("Sgai.Application",
+{
+    extend:"Ext.app.Application"   ,
+    name: 'Sgai',
+    requires:['Sgai.config.Runtime'],
+    views: [
+            ],
+
+    stores: [
+        
+    ],
+    controllers:
+    [
+#foreach($element in $appList) 
+      '${element}',
+#end
+    ] 
+
+});

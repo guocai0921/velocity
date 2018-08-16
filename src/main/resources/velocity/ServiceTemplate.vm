@@ -1,0 +1,16 @@
+package ${table.getServicePackage()};
+
+import com.sgai.core.base.service.BaseService;
+import ${table.getEntityPackage()}.${table.getEntityName()};
+
+/**
+ * ${table.getEntityName()}Service ${table.getTableDesc()}
+ * @author ${Author}
+ * @version ${Version}
+ * @date ${Date}
+ */
+ 
+public interface ${table.getEntityName()}Service extends BaseService<${table.getEntityName()}> {
+
+}
+

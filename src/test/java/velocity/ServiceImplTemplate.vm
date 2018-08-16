@@ -1,0 +1,25 @@
+package ${table.getServiceImplPackage()};
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.sgai.core.base.service.impl.BaseCRUDService;
+import ${table.getJavaMapperPackage()}.${table.getEntityName()}Mapper;
+import ${table.getEntityPackage()}.${table.getEntityName()};
+import ${table.getServicePackage()}.${table.getEntityName()}Service;
+
+/**
+ * ${table.getEntityName()}ServiceImpl ${table.getTableDesc()}
+ * @author ${Author}
+ * @version ${Version}
+ * @date ${Date}
+ */
+ 
+ @Service
+public class ${table.getEntityName()}ServiceImpl extends BaseCRUDService<${table.getEntityName()}> implements ${table.getEntityName()}Service
+{
+	private static final Log logger = LogFactory.getLog(${table.getEntityName()}ServiceImpl.class);
+	 @Autowired
+	 private ${table.getEntityName()}Mapper ${table.getFirstLetterLowerEntityName()}Mapper;
+}

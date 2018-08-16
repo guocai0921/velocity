@@ -1,0 +1,17 @@
+Ext.define('Sgai.model.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Model',
+	{
+		extend:'Ext.data.TreeModel',
+		idProperty:'sid',
+	
+#set($columnCount=${table.getColumns().size()})
+#set($count=1)
+		fields:[
+#foreach( $column in $table.getColumns())
+			{name:'${column.getFieldName()}',#if(${column.getFieldName()}=="version" || ${column.getFieldName()}=="sid") critical:true,#end type:'${column.getFieldExtJsType()}'}#if(${count}<$columnCount),#end
+#if(${count}<$columnCount)
+
+#end
+#set($count = ${count} + 1)    
+#end 
+        ]
+    });

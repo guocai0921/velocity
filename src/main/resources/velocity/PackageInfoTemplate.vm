@@ -1,0 +1,12 @@
+@ParentPackage("sgai")
+@Namespace("/${table.getModuleName()}")
+package ${table.getControllerPackage()};
+
+/**
+ * @author ${Author}
+ * @version ${Version}
+ * @date ${Date}
+ */
+ 
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.ParentPackage;

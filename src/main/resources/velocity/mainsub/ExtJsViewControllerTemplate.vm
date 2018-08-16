@@ -1,0 +1,255 @@
+Ext.define('Sgai.view.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}Controller', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.${mainTable.getFirstLetterLowerEntityName()}Ctrl',
+	
+	/**
+	 * 根据条件查询记录
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${mainTable.getFirstLetterLowerEntityName()}QueryBtnClick:function(btn, evt) {
+		var form = this.lookupReference('${mainTable.getFirstLetterLowerEntityName()}QueryForm');
+		var params = Sgai.util.Util.getFormParams(form);
+		var store = this.lookupReference('${mainTable.getFirstLetterLowerEntityName()}ListGrid').getStore();
+		store.proxy.extraParams=params;
+        store.load();
+	},
+
+	/**
+	 * 重置查询条件
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${mainTable.getFirstLetterLowerEntityName()}ResetBtnClick:function(btn, evt) {
+		 var form = this.lookupReference('${mainTable.getFirstLetterLowerEntityName()}QueryForm');
+		 form.reset();
+	},
+
+	/**
+	 * 弹出新增记录窗口
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${mainTable.getFirstLetterLowerEntityName()}AddBtnClick:function(btn, evt) {
+		var winHandle;
+    	if (!winHandle) {
+    		winHandle = Ext.create('Sgai.view.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}Win',{operate:'add', ctrl:this});
+    	}
+    	winHandle.show();		
+	},
+	
+	/**
+	 * 修改选中的记录
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${mainTable.getFirstLetterLowerEntityName()}EditBtnClick:function(btn, evt) {
+		var me = this;
+		var winHandle;
+		var grid = this.lookupReference('${mainTable.getFirstLetterLowerEntityName()}ListGrid');
+    	var selected =grid.getSelectionModel();
+	    if (selected.getSelection().length==1) {	
+	    	if (!winHandle) {
+	    		winHandle = Ext.create('Sgai.view.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}Win',
+	    							   {operate:'edit', 
+	    							   	ctrl:me
+	    							   });
+	    	} 
+			var form = winHandle.lookupReference('${mainTable.getFirstLetterLowerEntityName()}EditForm');
+			form.loadRecord(selected.getSelection()[0]);
+			winHandle.show();
+    	} else {
+    		Sgai.util.Util.showTipMsg('请选择一条要修改的记录!');
+    		return;
+    	}   	
+	},
+	
+	/**
+	 * 删除选中的记录
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${mainTable.getFirstLetterLowerEntityName()}DeleteBtnClick:function(btn, evt) {
+		var me = this;
+		var grid = this.lookupReference('${mainTable.getFirstLetterLowerEntityName()}ListGrid');
+    	var selected =grid.getSelectionModel();
+	    if (selected.getSelection().length>0) {
+	    	var delArray = [];
+	    	Ext.each(selected.getSelection(),function(item) {
+	    		var param={
+	    			sid:item.data.sid,
+	    			version:item.data.version
+	    		}
+	    		delArray.push(param);
+	    	});
+	    	var jsonData = Ext.JSON.encode(delArray);
+	    	Ext.Msg.confirm (
+				'操作提示',
+				'确认删除数据？',
+	            function (btn)  {
+	                if (btn == 'no') {
+	                	 return;
+	                } else {
+						var url = "${mainTable.getModuleName()}/${mainTable.getStrutsActionAlias()}/destroy.action";
+						Sgai.util.Util.postAjaxRequestByJsonData(url, jsonData, true, function(){
+							grid.getStore().reload();
+						}, function(){}, btn);
+	                }
+			   }
+	      )
+	    } else {
+	    	Sgai.util.Util.showTipMsg('请选择要删除的记录!');
+	    }
+	},
+	/**
+	 * 根据条件查询记录
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${subTable.getFirstLetterLowerEntityName()}QueryBtnClick:function(btn, evt) {
+		var form = this.lookupReference('${subTable.getFirstLetterLowerEntityName()}QueryForm');
+		var params = Sgai.util.Util.getFormParams(form);
+		
+		var grid = this.lookupReference('${mainTable.getFirstLetterLowerEntityName()}ListGrid');
+    	var selected =grid.getSelectionModel();
+    	if (selected.getSelection().length>0) {
+	    	var ${relativePar} = selected.getSelection()[0].data.sid;
+			params['qm.${relativePar}'] = ${relativePar};
+			
+			var store = this.lookupReference('${subTable.getFirstLetterLowerEntityName()}ListGrid').getStore();
+			store.proxy.extraParams=params;
+	        store.load();
+    	}
+	},
+
+	/**
+	 * 重置查询条件
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${subTable.getFirstLetterLowerEntityName()}ResetBtnClick:function(btn, evt) {
+		 var form = this.lookupReference('${subTable.getFirstLetterLowerEntityName()}QueryForm');
+		 form.reset();
+	},
+
+	/**
+	 * 弹出新增记录窗口
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${subTable.getFirstLetterLowerEntityName()}AddBtnClick:function(btn, evt) {
+		var winHandle;
+    	if (!winHandle) {
+    		winHandle = Ext.create('Sgai.view.${subTable.getModuleName()}.${subTable.getFirstLetterLowerEntityName()}.${subTable.getEntityName()}Win',{operate:'add', ctrl:this});
+    		var grid = this.lookupReference('${mainTable.getFirstLetterLowerEntityName()}ListGrid');
+    		var selected =grid.getSelectionModel();
+    		var ${relativePar} = selected.getSelection()[0].data.sid;
+    		var ${relativePar}Field = winHandle.lookupReference('${relativePar}');
+			${relativePar}Field.setValue(${relativePar});
+    	}
+    	winHandle.show();		
+	},
+	
+	/**
+	 * 修改选中的记录
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${subTable.getFirstLetterLowerEntityName()}EditBtnClick:function(btn, evt) {
+		var me = this;
+		var winHandle;
+		var grid = this.lookupReference('${subTable.getFirstLetterLowerEntityName()}ListGrid');
+    	var selected =grid.getSelectionModel();
+	    if (selected.getSelection().length==1) {	
+	    	if (!winHandle) {
+	    		winHandle = Ext.create('Sgai.view.${subTable.getModuleName()}.${subTable.getFirstLetterLowerEntityName()}.${subTable.getEntityName()}Win',
+	    							   {operate:'edit', 
+	    							   	ctrl:me
+	    							   });
+	    	} 
+			var form = winHandle.lookupReference('${subTable.getFirstLetterLowerEntityName()}EditForm');
+			form.loadRecord(selected.getSelection()[0]);
+			winHandle.show();
+    	} else {
+    		Sgai.util.Util.showTipMsg('请选择一条要修改的记录!');
+    		return;
+    	}   	
+	},
+	
+	/**
+	 * 删除选中的记录
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${subTable.getFirstLetterLowerEntityName()}DeleteBtnClick:function(btn, evt) {
+		var me = this;
+		var grid = this.lookupReference('${subTable.getFirstLetterLowerEntityName()}ListGrid');
+    	var selected =grid.getSelectionModel();
+	    if (selected.getSelection().length>0) {
+	    	var delArray = [];
+	    	Ext.each(selected.getSelection(),function(item) {
+	    		var param={
+	    			sid:item.data.sid,
+	    			version:item.data.version
+	    		}
+	    		delArray.push(param);
+	    	});
+	    	var jsonData = Ext.JSON.encode(delArray);
+	    	Ext.Msg.confirm (
+				'操作提示',
+				'确认删除数据？',
+	            function (btn)  {
+	                if (btn == 'no') {
+	                	 return;
+	                } else {
+						var url = "${subTable.getModuleName()}/${subTable.getStrutsActionAlias()}/destroy.action";
+						Sgai.util.Util.postAjaxRequestByJsonData(url, jsonData, true, function(){
+							grid.getStore().reload();
+						}, function(){}, btn);
+	                }
+			   }
+	      )
+	    } else {
+	    	Sgai.util.Util.showTipMsg('请选择要删除的记录!');
+	    }
+	},
+	/**
+	 * 主表记录选中变化触发操作
+	 * @param {} model
+	 * @param {} selected
+	 * @param {} eOpts
+	 */
+	${mainTable.getFirstLetterLowerEntityName()}SelectionChange:function(model, selected, eOpts){
+    	var me = this;
+    	var ${subTable.getFirstLetterLowerEntityName()}ListGrid = me.lookupReference('${subTable.getFirstLetterLowerEntityName()}ListGrid');
+		var ${subTable.getFirstLetterLowerEntityName()}Store = ${subTable.getFirstLetterLowerEntityName()}ListGrid.getStore();
+    	if (selected.length==1) {
+    		var params = {
+				'qm.${relativePar}':selected[0].data.sid
+			}	
+			${subTable.getFirstLetterLowerEntityName()}Store.on('load',onStoreLoad=function(store, records, successful, eOpts){
+				
+				store.un('load', onStoreLoad);
+			});
+			${subTable.getFirstLetterLowerEntityName()}Store.proxy.extraParams=params;
+	        ${subTable.getFirstLetterLowerEntityName()}Store.load();
+	        me.lookupReference("${subTable.getFirstLetterLowerEntityName()}QueryBtn").setDisabled(false); 
+	        me.lookupReference("${subTable.getFirstLetterLowerEntityName()}ResetBtn").setDisabled(false); 
+	        me.lookupReference("${subTable.getFirstLetterLowerEntityName()}AddBtn").setDisabled(false); 
+	        me.lookupReference("${subTable.getFirstLetterLowerEntityName()}EditBtn").setDisabled(false); 
+	        me.lookupReference("${subTable.getFirstLetterLowerEntityName()}DeleteBtn").setDisabled(false); 
+    	} else {
+    		//当主表中记录未选中时，清除字表中的记录
+        	var params = {
+				'qm.${relativePar}':-100
+			}
+			${subTable.getFirstLetterLowerEntityName()}Store.proxy.extraParams=params;
+	        ${subTable.getFirstLetterLowerEntityName()}Store.load();
+	        me.lookupReference("${subTable.getFirstLetterLowerEntityName()}QueryBtn").setDisabled(true); 
+	        me.lookupReference("${subTable.getFirstLetterLowerEntityName()}ResetBtn").setDisabled(true); 
+	        me.lookupReference("${subTable.getFirstLetterLowerEntityName()}AddBtn").setDisabled(true); 
+	        me.lookupReference("${subTable.getFirstLetterLowerEntityName()}EditBtn").setDisabled(true); 
+	        me.lookupReference("${subTable.getFirstLetterLowerEntityName()}DeleteBtn").setDisabled(true); 
+    	}
+    }
+});

@@ -1,0 +1,31 @@
+
+Ext.define('Sgai.store.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Store',
+{
+        extend:'Ext.data.TreeStore',
+        autoLoad:false,        
+        model:'Sgai.model.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Model',	
+        remoteSort:'true',
+        
+        proxy: {           
+	    	type:'ajax',
+	    	actionMethods:{
+	    		read:'POST'
+	    	},
+            api:
+            {
+                read:'${table.getModuleName()}/${table.getStrutsActionAlias()}/findTree.action',
+                create:'${table.getModuleName()}/${table.getStrutsActionAlias()}/addBatchFromJson.action',
+                update:'${table.getModuleName()}/${table.getStrutsActionAlias()}/updateBatchFromJson.action',
+                destroy:'${table.getModuleName()}/${table.getStrutsActionAlias()}/destroy.action'
+            },
+
+            reader:
+            {
+                type:'json',
+                rootProperty:'items',
+                totalProperty:'totalProperty',
+                successProperty:'success',
+                messageProperty:'message'
+            }
+        }
+    });

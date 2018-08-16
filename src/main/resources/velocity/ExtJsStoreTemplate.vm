@@ -1,0 +1,32 @@
+
+Ext.define('Sgai.store.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Store',
+{
+        extend:'Ext.data.Store',
+        autoLoad:false,        
+        pageSize:15,
+        model:'Sgai.model.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Model',	
+        remoteSort:'true',
+        
+        proxy: {           
+	    	type:'ajax',
+	    	actionMethods:{
+	    		read:'POST'
+	    	},
+            api:
+            {
+                read:'${table.getModuleName()}/${table.getStrutsActionAlias()}/findByPage.action',
+                create:'${table.getModuleName()}/${table.getStrutsActionAlias()}/addBatchFromJson.action',
+                update:'${table.getModuleName()}/${table.getStrutsActionAlias()}/updateBatchFromJson.action',
+                destroy:'${table.getModuleName()}/${table.getStrutsActionAlias()}/destroy.action'
+            },
+
+            reader:
+            {
+                type:'json',
+                rootProperty:'data.items',
+                totalProperty:'data.totalProperty',
+                successProperty:'meta.success',
+                messageProperty:'meta.message'
+            }
+        }
+    });

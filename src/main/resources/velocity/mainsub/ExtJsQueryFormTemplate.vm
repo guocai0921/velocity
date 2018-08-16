@@ -1,0 +1,53 @@
+Ext.define('Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}QueryForm', {
+	extend:'Ext.form.Panel',
+	alias:'widget.${table.getFirstLetterLowerEntityName()}QueryForm',
+	itemId:'${table.getFirstLetterLowerEntityName()}QueryForm',
+	reference:'${table.getFirstLetterLowerEntityName()}QueryForm',
+	
+	title:'查询条件',
+	iconCls:'look',
+   	frame:true, 
+   	region:'center',
+   	collapsible:true,
+   	collapsed:true,
+ 	layout:{
+	   type:'table',
+	   columns:4
+   	},
+   	
+   	//统一设置表单字段默认属性
+   	defaults:{
+   		xtype:'textfield',
+   		//qtip悬浮提示;
+   		//title显示一个浏览器原始的悬浮提示信息；
+   		//under在字段下发显示提示信息
+		//side在字段右边显示；
+   		//none ;或指定位置显示
+		msgTarget:'qtip',
+		labelWidth:75,
+		blankText:'不能为空',
+		labelAlign:'right',
+		width:250,
+		margin:'1 0'
+	},
+			
+	items:[
+		{
+            name:'qm.${table.getColumns().get(1).getFieldName()}',
+            reference:'${table.getColumns().get(1).getFieldName()}',
+            fieldLabel:bizI18n.${table.getFirstLetterLowerModuleEntityName()}.${table.getColumns().get(1).getFieldName()},
+            maxLength:128
+        },
+        {
+            name:'qm.${table.getColumns().get(2).getFieldName()}',
+            reference:'${table.getColumns().get(2).getFieldName()}',
+            fieldLabel:bizI18n.${table.getFirstLetterLowerModuleEntityName()}.${table.getColumns().get(2).getFieldName()},
+            maxLength:128
+        },
+        {
+        	fieldLabel:'小提示',
+        	xtype:'displayfield',
+        	value:'查询条件设置区域'
+        }
+	]
+});

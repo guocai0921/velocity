@@ -1,0 +1,104 @@
+Ext.define('Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Controller', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.${table.getFirstLetterLowerEntityName()}Ctrl',
+	
+	/**
+	 * 根据条件查询记录
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${table.getFirstLetterLowerEntityName()}QueryBtnClick:function(btn, evt) {
+		var form = this.lookupReference('${table.getFirstLetterLowerEntityName()}QueryForm');
+		var params = Sgai.util.Util.getFormParams(form);
+		var store = this.lookupReference('${table.getFirstLetterLowerEntityName()}ListGrid').getStore();
+		store.proxy.extraParams=params;
+        store.load();
+	},
+
+	/**
+	 * 重置查询条件
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${table.getFirstLetterLowerEntityName()}ResetBtnClick:function(btn, evt) {
+		 var form = this.lookupReference('${table.getFirstLetterLowerEntityName()}QueryForm');
+		 form.reset();
+	},
+
+	/**
+	 * 弹出新增记录窗口
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${table.getFirstLetterLowerEntityName()}AddBtnClick:function(btn, evt) {
+		var winHandle;
+    	if (!winHandle) {
+    		winHandle = Ext.create('Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Win',{operate:'add', ctrl:this});
+    	}
+    	winHandle.show();		
+	},
+	
+	/**
+	 * 修改选中的记录
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${table.getFirstLetterLowerEntityName()}EditBtnClick:function(btn, evt) {
+		var me = this;
+		var winHandle;
+		var grid = this.lookupReference('${table.getFirstLetterLowerEntityName()}ListGrid');
+    	var selected =grid.getSelectionModel();
+	    if (selected.getSelection().length==1) {	
+	    	if (!winHandle) {
+	    		winHandle = Ext.create('Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Win',
+	    							   {operate:'edit', 
+	    							   	ctrl:me
+	    							   });
+	    	} 
+			var form = winHandle.lookupReference('${table.getFirstLetterLowerEntityName()}EditForm');
+			form.loadRecord(selected.getSelection()[0]);
+			winHandle.show();
+    	} else {
+    		Sgai.util.Util.showTipMsg('请选择一条要修改的记录!');
+    		return;
+    	}   	
+	},
+	
+	/**
+	 * 删除选中的记录
+	 * @param {} btn
+	 * @param {} evt
+	 */
+	${table.getFirstLetterLowerEntityName()}DeleteBtnClick:function(btn, evt) {
+		var me = this;
+		var grid = this.lookupReference('${table.getFirstLetterLowerEntityName()}ListGrid');
+    	var selected =grid.getSelectionModel();
+	    if (selected.getSelection().length>0) {
+	    	var delArray = [];
+	    	Ext.each(selected.getSelection(),function(item) {
+	    		var param={
+	    			sid:item.data.sid,
+	    			version:item.data.version
+	    		}
+	    		delArray.push(param);
+	    	});
+	    	var jsonData = Ext.JSON.encode(delArray);
+	    	Ext.Msg.confirm (
+				'操作提示',
+				'确认删除数据？',
+	            function (btn)  {
+	                if (btn == 'no') {
+	                	 return;
+	                } else {
+						var url = "${table.getModuleName()}/${table.getStrutsActionAlias()}/destroy.action";
+						Sgai.util.Util.postAjaxRequestByJsonData(url, jsonData, true, function(){
+							grid.getStore().reload();
+						}, function(){}, btn);
+	                }
+			   }
+	      )
+	    } else {
+	    	Sgai.util.Util.showTipMsg('请选择要删除的记录!');
+	    }
+	}
+});

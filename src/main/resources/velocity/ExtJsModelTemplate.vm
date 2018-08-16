@@ -1,0 +1,20 @@
+Ext.define('Sgai.model.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Model',
+	{
+		extend:'Sgai.model.AbstractModel',
+		idProperty:'sid',
+		versionProperty:'version',
+	
+#set($columnCount=${table.getColumns().size()} )
+#set($count=1)
+		fields:[
+#foreach( $column in $table.getColumns())
+#if(!${column.isExcludeFiled()})
+			{name:'${column.getFieldName()}' , type:'${column.getFieldExtJsType()}'}#if(${count}<$columnCount),#end
+#if(${count}<$columnCount)
+
+#end
+#set($count = ${count} + 1)
+#end	    
+#end 
+        ]
+    });

@@ -1,0 +1,161 @@
+Ext.define('Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Controller', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.${table.getFirstLetterLowerEntityName()}Ctrl',
+    
+    onButtonClickExpandAll: function(button, e, options) {
+    	var treePanel = this.lookupReference('${table.getFirstLetterLowerEntityName()}Tree');
+		treePanel.expandAll();
+	},
+	onButtonClickCollapseAll: function(button, e, options) {
+		var treePanel = this.lookupReference('${table.getFirstLetterLowerEntityName()}Tree');
+		treePanel.collapseAll();
+	},
+	
+	onButtonClickSave: function(button, e, options) {
+		var gridPanel = this.lookupReference('${table.getFirstLetterLowerEntityName()}Tree');
+		var currentNodePath=gridPanel.currentNodePath;
+		//校验必填项目
+		var store = gridPanel.getStore();
+		var newRec = store.getNewRecords();
+		var updateRec = store.getUpdatedRecords();
+		var removeRec= store.getRemovedRecords();
+		var isValidNew = this.validRecords(newRec);
+		var isValidUpdate = this.validRecords(updateRec);
+		if (!isValidNew||!isValidUpdate) {
+			Sgai.util.Util.showErrorMsg(translations['notAllInputTip']);
+			return;
+		}
+		
+		store.on('load', expandPath =function() {
+			gridPanel.expandPath(currentNodePath);
+		});
+		
+		Ext.Msg.confirm (
+            translations.operateMsgWinTitle,
+            translations.operateConfirm,
+            function (btn)
+            {
+                if (btn == 'no') {
+                	return;
+                } else {					                	     
+			        store.sync({
+					   success:function(batch, options) {
+			        		Sgai.util.Util.showTipMsg(translations['operateSuccess']);
+			        		store.reload();   
+				       },
+				       failure:function(batch, options) {
+				       		store.reload();
+				       }				           
+			        }); 
+                }
+            }
+         );    
+	},
+	
+	validRecords:function(vRecords) {
+		if (vRecords=="") {
+			return true;
+		}
+		for (var i=0;i<vRecords.length;i++) {
+			var record = vRecords[i];
+			if (Ext.String.trim(record.data.nodeId)=="") {
+				return false;
+			}
+			if (Ext.String.trim(record.data.nodeName)=="") {
+				return false;
+			}
+		}
+		return true;
+	},
+	//释放节点
+    dropNode:function(node, data, overModel, dropPosition, eOpts) {
+    	var me = this;
+    	var tree = this.lookupReference('${table.getFirstLetterLowerEntityName()}Tree');
+    	var treeStore = tree.getStore();
+    	var srcNode = treeStore.findRecord('sid', data.records[0].data.sid);
+    	srcNode.set('parentSid', overModel.data.sid);
+    	srcNode.set('nodeLevel', overModel.data.nodeLevel + 1);
+    	me.modifyChildrenRecursively(srcNode, treeStore);
+    },
+    //释放节点确认
+    beforeDropNode:function(node, data, overModel, dropPosition, dropHandlers) {
+    	dropHandlers.wait = true; 
+    	var fromNodeName = data.records[0].data.nodeName;
+    	var toNodeName = overModel.data.nodeName;
+	    Ext.MessageBox.confirm('节点移动', '你确认要移动' + fromNodeName + '到' + toNodeName + '？', function(btn){
+	        if (btn === 'yes') {
+	            dropHandlers.processDrop();
+	        } else {
+	            dropHandlers.cancelDrop();
+	        }
+	    });
+    },
+    modifyChildrenRecursively:function(node, store) { 
+    	var me = this;
+		if (node.hasChildNodes()) {	     	
+			var childnodes = node.childNodes;
+			for(var i=0;i<childnodes.length;i++){  
+				var childnode = childnodes[i];
+				var srcNode = store.findRecord('sid', childnode.data.sid);
+			    srcNode.set('nodeLevel', node.data.nodeLevel + 1);
+				if(childnode.childNodes.length>0){  					
+					me.modifyChildrenRecursively(childnode, store);
+				}   
+			}
+		}
+    },
+    
+    onFindNodeBtnClick: function(button, e, options) {
+		var me = this;
+		var tree = this.lookupReference('${table.getFirstLetterLowerEntityName()}Tree');
+		var nodeText = this.lookupReference('treeNodeText');
+		var nodeTextValue = nodeText.value;
+		if(!Ext.isEmpty(nodeTextValue)) {
+			me.clearSearchResult(tree.getRootNode(), nodeTextValue, tree);
+			tree.collapseAll();
+			me.childrenSearchRecursively(tree.getRootNode(), nodeTextValue, tree);
+		} else {
+			me.clearSearchResult(tree.getRootNode(), nodeTextValue, tree);
+		}
+	},
+    //查找节点并展开
+    childrenSearchRecursively:function(node, searchStr, tree) {
+    	var me = this;
+    	var nodeMatched = false;
+		if (node.hasChildNodes()) {	   
+			var childnodes = node.childNodes;
+			for(var i=0;i<childnodes.length;i++){  
+				var childnode = childnodes[i];
+				if (childnode.data.nodeName.indexOf(searchStr)>=0) {
+					childnode.data.checked=true;
+					nodeMatched = true;
+				} else {
+					childnode.data.checked = null;
+				}
+				if(childnode.hasChildNodes()){  					
+					me.childrenSearchRecursively(childnode, searchStr, tree);    
+				}
+			}
+			if (nodeMatched) {
+				node.expand();
+			}
+		}
+    },
+    clearSearchResult:function(node, searchStr, tree) {
+    	var me = this;
+		if (node.hasChildNodes()) {	   
+			var childnodes = node.childNodes;
+			for(var i=0;i<childnodes.length;i++){  
+				var childnode = childnodes[i];
+				childnode.data.checked = null;
+				if(childnode.hasChildNodes()){  					
+					me.clearSearchResult(childnode, searchStr, tree);    
+				}
+			}
+			if (node.isExpanded()) {
+				node.collapse();
+				node.expand();
+			}
+		}
+    }
+});

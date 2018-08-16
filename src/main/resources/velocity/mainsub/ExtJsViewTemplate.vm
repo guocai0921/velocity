@@ -1,0 +1,51 @@
+Ext.define('Sgai.view.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}View', {
+	extend:'Ext.panel.Panel',
+	alias:'widget.${mainTable.getFirstLetterLowerEntityName()}View',
+	layout:'fit', 
+	itemId:'${mainTable.getFirstLetterLowerEntityName()}View',
+	reference:'${mainTable.getFirstLetterLowerEntityName()}View',
+	
+    requires:[
+    	'Sgai.view.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}QueryForm',
+		'Sgai.view.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}ListGrid',
+		'Sgai.view.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}Controller',
+		'Sgai.view.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}Win',
+		'Sgai.view.${mainTable.getModuleName()}.${mainTable.getFirstLetterLowerEntityName()}.${mainTable.getEntityName()}WinController',
+		'Sgai.view.${subTable.getModuleName()}.${subTable.getFirstLetterLowerEntityName()}.${subTable.getEntityName()}QueryForm',
+		'Sgai.view.${subTable.getModuleName()}.${subTable.getFirstLetterLowerEntityName()}.${subTable.getEntityName()}ListGrid',
+		'Sgai.view.${subTable.getModuleName()}.${subTable.getFirstLetterLowerEntityName()}.${subTable.getEntityName()}Win',
+		'Sgai.view.${subTable.getModuleName()}.${subTable.getFirstLetterLowerEntityName()}.${subTable.getEntityName()}WinController'
+    ],
+	
+    controller:'${mainTable.getFirstLetterLowerEntityName()}Ctrl',
+    
+	dockedItems:[
+		{
+    		xtype:'${mainTable.getFirstLetterLowerEntityName()}QueryForm'
+    	}
+	],
+	
+	items:[
+		{	
+			xtype:'container',
+			layout:{
+				type : 'vbox',//垂直盒布局
+				pack : 'start',
+				align : 'stretch'
+			},
+			items:[
+				{	
+					xtype: '${mainTable.getFirstLetterLowerEntityName()}ListGrid',
+					flex:5
+				},
+				{	
+					xtype: '${subTable.getFirstLetterLowerEntityName()}QueryForm'
+				},
+				{	
+					xtype: '${subTable.getFirstLetterLowerEntityName()}ListGrid',
+					flex:4
+				}
+			]
+		}
+	]
+});

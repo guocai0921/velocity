@@ -1,0 +1,206 @@
+Ext.define('Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Tree',
+{
+    extend:'Ext.tree.Panel',
+    alias:"widget.${table.getFirstLetterLowerEntityName()}Tree",
+    layout:'fit', 
+    title: translations.dataList,
+    iconCls:'data',
+    autoHeight:true,
+    height:530,
+    trackMouseOver:true,
+    animate:true,
+    useArrows: true,
+    region:'center',
+    autoScroll : true,           
+    itemId: '${table.getFirstLetterLowerEntityName()}Tree',
+    reference:'${table.getFirstLetterLowerEntityName()}Tree',
+    loadMask: true, 
+    rootVisible:false,
+    singleClickExpand: true,
+    columnLines:true,
+    
+    viewConfig: {
+    	stripeRows:true,
+    	forceFit: true,
+	 	scrollOffset: 0,
+	 	enableTextSelection:true,
+	 	expandOnly:true,
+	 	//拖拽插件会影响tree列表中下拉框，暂时先注释掉
+//		plugins: {
+//        	allowContainerDrop : false,
+//            ptype: 'treeviewdragdrop',
+//            nodeHighlightOnRepair : true,
+//            appendOnly:true            
+//        },
+        listeners:{
+	        beforeDrop:'beforeDropNode',
+	        drop:'dropNode',
+	    	beforerender:function(tree, eOpts) {
+	    		tree.getStore().load();
+	    	}
+        }
+	},
+	
+    tbar:[
+ 		{
+         	xtype:'button',
+        	text:translations.expandAll,
+        	iconCls:'delete',
+        	itemId: 'btn${table.getEntityName()}ExpandAll',
+        	reference:'btn${table.getEntityName()}ExpandAll',
+        	handler:'onButtonClickExpandAll'
+        },
+        {
+         	xtype:'button',
+        	text:translations.collapseAll,
+        	iconCls:'add',
+        	itemId: 'btn${table.getEntityName()}CollapseAll',
+        	reference:'btn${table.getEntityName()}CollapseAll',
+        	handler:'onButtonClickCollapseAll'
+        },
+        '-',
+        {
+        	xtype:'textfield',
+        	emptyText:'请输入菜单名称',
+        	width:110,
+        	reference:'treeNodeText',
+        	iconCls:'find'
+        },
+        {
+        	xtype:'button',
+        	text:'查询',
+        	tooltip:'查找菜单',
+        	itemId:'findNodeBtn',
+        	iconCls:'find',
+        	handler:'onFindNodeBtnClick'
+        },
+        '-',
+        {
+         	xtype:'button',
+        	text:translations.submit,
+        	//privilegeCode:'SU010103',
+        	iconCls:'save',
+        	itemId: 'btn${table.getEntityName()}Save',
+        	reference:'btn${table.getEntityName()}Save',
+        	handler:'onButtonClickSave'
+        }
+    ],
+    
+    store: Ext.create('Sgai.store.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Store',{
+    	listeners:{
+    		load:function(store, records, successful, eOpts) {
+	    		var rootNode = this.getRootNode();
+				if (rootNode.hasChildNodes()) {
+					var firstNode = rootNode.firstChild;
+					firstNode.expand();
+				}
+    		}
+    	}
+    }),
+    
+    columns: [
+        {
+            xtype: 'treecolumn',
+            dataIndex: 'nodeName',
+            text: bizI18n.sampleDept.nodeName,
+            width:200
+        },
+#set($columnCount=1)
+#foreach( $column in $table.getColumns())
+		{
+			xtype:'gridcolumn',
+			text:bizI18n.${table.getFirstLetterLowerModuleEntityName()}.${column.getFieldName()},			
+			dataIndex:'${column.getFieldName()}',
+#if(!$column.isExcludeFiled())
+			editor : {
+				xtype : 'textfield',
+				emptyText:translations.pleaseInput + bizI18n.${table.getFirstLetterLowerModuleEntityName()}.${column.getFieldName()},
+				allowBlank:false,
+				maxLength:32,
+				enforceMaxLength:true,
+				msgTarget: 'under'
+			},
+#end
+#if($column.getFieldExtJsType()=="date")
+			renderer:Ext.util.Format.dateRenderer("Y-m-d H:i:s"),
+#end
+			width:200#if($column.isExcludeFiled()),#end			 			
+#if($column.isExcludeFiled())
+
+			hidden:true
+#else
+
+#end
+		}#if(${columnCount}<${table.getColumns().size()}),#end
+
+#set($columnCount = ${columnCount} + 1)
+#end     
+	],
+    
+	plugins: [
+              {
+				ptype: 'cellediting',
+				pluginId:'${table.getFirstLetterLowerEntityName()}TreeCellEditing',
+				clicksToEdit: 2,
+				autoCancel:false   
+              }
+    ],
+    
+    listeners:{  
+        'itemcontextmenu':function(menutree,record,items,index,e){ 
+        	var me = this;
+            e.preventDefault();  
+            e.stopEvent();  
+            //判断是否为叶子结点 
+            var treePanel = Ext.ComponentQuery.query('treepanel#${table.getFirstLetterLowerEntityName()}Tree')[0];
+           // if(record.data.leaf==false){
+            	if (!record.isExpanded()) {
+					treePanel.expandNode(record);
+					treePanel.currentNodePath=record.getPath();
+				};
+            	var nodemenu = new Ext.menu.Menu({  
+	                floating:true,  
+	                allowOtherMenus:false,
+	                items:[
+		                {  
+		                    text:translations.addNode,	
+		                    iconCls:'add',
+		                    //disabled:!Sgai.util.Util.isAccessible('SU010101'),
+		                    handler:function(){
+	                    		var ${table.getFirstLetterLowerEntityName()}Model = new Sgai.model.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Model();
+	                    		${table.getFirstLetterLowerEntityName()}Model.set('sid',Math.round(Math.random()*1000000));
+	                    		${table.getFirstLetterLowerEntityName()}Model.set('nodeLevel',record.data.nodeLevel +1);
+	                    		${table.getFirstLetterLowerEntityName()}Model.set('parentSid',record.data.sid);
+		                    	record.appendChild(${table.getFirstLetterLowerEntityName()}Model);
+		                    	treePanel.collapseNode(record);
+		                    	treePanel.expandNode(record);
+		                    }  
+		                },
+		                {  
+		                    text:translations.delNode, 
+		                    iconCls:'delete',
+		                    //disabled:!Sgai.util.Util.isAccessible('SU010102'),
+		                    handler:function(){
+		                        if (record.hasChildNodes()) {
+		                        	Ext.MessageBox.show({
+									    title:translations.operateMsgWinTitle,
+									    msg:translations.hasChildCanNotDel,
+									    buttons:Ext.Msg.OK,
+									    icon:Ext.MessageBox.INFO
+									});
+		                        } else {					                       
+		                        	record.remove();						                      
+		                        }
+		                    }  
+		                }
+	                ]  					                  
+	            });  
+	            nodemenu.on('mouseleave', function(menu){
+					menu.hide();
+				});
+            	nodemenu.showAt(e.getXY());  
+            //}  
+        }  
+    }
+});
+

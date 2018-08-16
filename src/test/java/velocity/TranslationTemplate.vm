@@ -1,0 +1,27 @@
+/**
+ * 业务功能国际化配置概览
+#foreach( $table in $tables)
+ * $table.getEntityName() [table=${table.tableName}] ${table.tableDesc}
+#end
+ *
+ * @author ${Author}
+ * @version ${Version}
+ * @date ${Date}
+ */
+
+bizI18n = {
+#set($tableCount=1)
+ #foreach( $table in $tables)
+	/* $table.getTableDesc() [table="${table.tableName}"]" */
+	$table.getFirstLetterLowerModuleEntityName():{
+#set($columnCount=1)
+#foreach( $column in $table.getColumns())
+	     $column.getFieldName():'$column.getColumnDesc()'#if(${columnCount}<${table.getColumns().size()}),#end        
+#set($columnCount = ${columnCount} + 1)
+	     
+#end        
+	}#if(${tableCount}<${tables.size()}),#end
+#set($tableCount = ${tableCount} + 1)	
+
+#end
+};

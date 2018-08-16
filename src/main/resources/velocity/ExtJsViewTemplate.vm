@@ -1,0 +1,33 @@
+Ext.define('Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}View', {
+	extend:'Ext.panel.Panel',
+	alias:'widget.${table.getFirstLetterLowerEntityName()}View',
+	layout:'fit', 
+	itemId:'${table.getFirstLetterLowerEntityName()}View',
+	reference:'${table.getFirstLetterLowerEntityName()}View',
+	
+    requires:[
+    	'Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}QueryForm',
+		'Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}ListGrid',
+		'Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Controller',
+		'Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}Win',
+		'Sgai.view.${table.getModuleName()}.${table.getFirstLetterLowerEntityName()}.${table.getEntityName()}WinController'
+    ],
+	
+    controller:'${table.getFirstLetterLowerEntityName()}Ctrl',
+    
+    listeners:{
+		
+	},
+	
+	dockedItems:[
+		{
+    		xtype:'${table.getFirstLetterLowerEntityName()}QueryForm'
+    	}
+	],
+	
+	items:[
+		{	
+			xtype: '${table.getFirstLetterLowerEntityName()}ListGrid'		                    
+		}
+	]
+});
