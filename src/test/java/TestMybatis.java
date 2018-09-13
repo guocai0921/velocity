@@ -30,7 +30,7 @@ import java.util.Map;
 public class TestMybatis {
 
 	public static void main(String[] args) {
-		test("PES_","PES_QM_DEAL");
+		test("VIEW_","VIEW_EY_MASS");
 
 	}
 
