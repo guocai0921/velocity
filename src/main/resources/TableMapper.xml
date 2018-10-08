@@ -31,7 +31,8 @@
             and  TABLE_NAME like '' || #{tablePrefix} || '%'
         </if>
         <if test="tableName != null" >
-            and  TABLE_NAME = #{tableName}
+            /*and  TABLE_NAME like '%${tableName}%'*/
+            and TABLE_NAME = #{tableName}
         </if>
     </select>
 

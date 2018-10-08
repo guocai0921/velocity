@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ import java.util.Map;
 public class TestMybatis {
 
 	public static void main(String[] args) {
-		test("VIEW_","VIEW_EY_MASS");
+		test("PES_","PES_PRO_FINISHING");
 
 	}
 
@@ -63,7 +64,7 @@ public class TestMybatis {
 			List<Table> tables = mapper.getTablesByPrefix(map);
 			for (Table table : tables) {
 				table.setTablePrefix(fileSurfixName);
-				table.setTableName(tableName);
+				table.setTableName(table.getTableName());
 				System.out.println("table--->" + table);
 			}
 			TestMybatis myThis = new TestMybatis();
