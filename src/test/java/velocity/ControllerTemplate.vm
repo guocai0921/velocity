@@ -12,10 +12,11 @@ import ${table.getEntityPackage()}.${table.getEntityName()};
 import ${table.getServicePackage()}.${table.getEntityName()}Service;
 
 /**
- * ${table.getEntityName()}Controller ${table.getTableDesc()}
- * @author ${Author}
- * @version ${Version}
- * @date ${Date}
+ * @ClassName:   ${table.getEntityName()}Controller
+ * @Description: ${table.getTableDesc()}---控制层
+ * @author       ${Author}
+ * @version      ${Version}
+ * @date         ${Date}
  */
 @RestController
 @Scope("prototype")

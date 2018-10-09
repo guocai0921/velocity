@@ -24,7 +24,7 @@ public class Table {
 	/**
 	 * 数据库表描述
 	 */
-	private String tableDesc="[Table Comment not set]";
+	private String tableDesc="";
 	/**
 	 * 数据库表类型
 	 */
@@ -65,6 +65,8 @@ public class Table {
 	 * 生成的Service Implement类包路径
 	 */
 	private String serviceImplPackage;
+
+	private String content;
 
 	public String getTableName() {
 		return tableName;
@@ -107,65 +109,6 @@ public class Table {
 		this.tablePrefix = tablePrefix;
 	}
 
-	/**
-	 * 返回Entity名称
-	 * @return
-	 */
-	public String getEntityName () {
-		this.entityName = Util.firstLetterToUpper(this.getModuleName()) + Util.firstLetterToUpper(
-				Util.underlineToCamel(
-						this.tableName.replace(this.tablePrefix, "")
-								.replace(Util.getModuleName(this.tableName,this.tablePrefix) + "_", "")));
-		return entityName;
-	}
-	/**
-	 * 返回Entity类包路径
-	 * @return
-	 */
-	public String getEntityPackage() {
-		this.entityPackage = "com.sgai." + this.getModuleName() + ".entity";
-		return entityPackage;
-	}
-	/**
-	 * 返回Controller类包路径
-	 * @return
-	 */
-	public String getControllerPackage() {
-		this.controllerPackage = "com.sgai." +  this.getModuleName() + ".controller";
-		return controllerPackage;
-	}
-	/**
-	 * 返回Java Mapper类包路径
-	 * @return
-	 */
-	public String getJavaMapperPackage() {
-		this.javaMapperPackage = "com.sgai." + this.getModuleName() + ".mapper";
-		return javaMapperPackage;
-	}
-	/**
-	 * 返回Xml Mapper文件包路径
-	 * @return
-	 */
-	public String getXmlMapperPackage() {
-		this.xmlMapperPackage = "com.sgai." + this.getModuleName() + ".mapper";
-		return xmlMapperPackage;
-	}
-	/**
-	 * 返回Service类包路径
-	 * @return
-	 */
-	public String getServicePackage() {
-		this.servicePackage = "com.sgai." + this.getModuleName() + ".service";
-		return servicePackage;
-	}
-	/**
-	 * 返回Service implement类包路径
-	 * @return
-	 */
-	public String getServiceImplPackage() {
-		this.serviceImplPackage = "com.sgai." + this.getModuleName() + ".service.impl";
-		return serviceImplPackage;
-	}
 
 	/**
 	 * 返回对应模块简写名称
@@ -243,6 +186,71 @@ public class Table {
 		int randNum = rand.nextInt(999);
 		return randNum;
 	}
+
+	// <========================================================================================================>>
+
+
+	/**
+	 * 返回Entity名称
+	 * @return
+	 */
+	public String getEntityName () {
+		this.entityName = Util.firstLetterToUpper(this.getModuleName()) + Util.firstLetterToUpper(
+				Util.underlineToCamel(
+						this.tableName.replace(this.tablePrefix, "")
+								.replace(Util.getModuleName(this.tableName,this.tablePrefix) + "_", "")));
+		return entityName;
+	}
+	/**
+	 * 返回Entity类包路径
+	 * @return
+	 */
+	public String getEntityPackage() {
+		this.entityPackage = "com.sgai." + this.getModuleName() + ".entity";
+		return entityPackage;
+	}
+	/**
+	 * 返回Controller类包路径
+	 * @return
+	 */
+	public String getControllerPackage() {
+		this.controllerPackage = "com.sgai." +  this.getModuleName() + ".controller";
+		return controllerPackage;
+	}
+	/**
+	 * 返回Java Mapper类包路径
+	 * @return
+	 */
+	public String getJavaMapperPackage() {
+		this.javaMapperPackage = "com.sgai." + this.getModuleName() + ".mapper";
+		return javaMapperPackage;
+	}
+	/**
+	 * 返回Xml Mapper文件包路径
+	 * @return
+	 */
+	public String getXmlMapperPackage() {
+		this.xmlMapperPackage = "com.sgai." + this.getModuleName() + ".mapper";
+		return xmlMapperPackage;
+	}
+	/**
+	 * 返回Service类包路径
+	 * @return
+	 */
+	public String getServicePackage() {
+		this.servicePackage = "com.sgai." + this.getModuleName() + ".service";
+		return servicePackage;
+	}
+	/**
+	 * 返回Service implement类包路径
+	 * @return
+	 */
+	public String getServiceImplPackage() {
+		this.serviceImplPackage = "com.sgai." + this.getModuleName() + ".service.impl";
+		return serviceImplPackage;
+	}
+
+
 	@Override
 	public String toString() {
 		StringBuffer sb =new StringBuffer();
@@ -272,4 +280,70 @@ public class Table {
 		return sb.toString();
 	}
 
+
+	//<<<======================================================================================================>>>
+
+	// public String getContent() {
+	// 	return content;
+	// }
+	//
+	// public void setContent(String content) {
+	// 	this.content = content;
+	// }
+	//
+	// public void setEntityName(String entityName) {
+	// 	this.entityName = entityName;
+	// }
+	//
+	// public String getEntityPackage() {
+	// 	return entityPackage;
+	// }
+	//
+	// public void setEntityPackage(String entityPackage) {
+	// 	this.entityPackage = entityPackage;
+	// }
+	//
+	// public String getJavaMapperPackage() {
+	// 	return javaMapperPackage;
+	// }
+	//
+	// public void setJavaMapperPackage(String javaMapperPackage) {
+	// 	this.javaMapperPackage = javaMapperPackage;
+	// }
+	//
+	// public String getXmlMapperPackage() {
+	// 	return xmlMapperPackage;
+	// }
+	//
+	// public void setXmlMapperPackage(String xmlMapperPackage) {
+	// 	this.xmlMapperPackage = xmlMapperPackage;
+	// }
+	//
+	// public String getControllerPackage() {
+	// 	return controllerPackage;
+	// }
+	//
+	// public void setControllerPackage(String controllerPackage) {
+	// 	this.controllerPackage = controllerPackage;
+	// }
+	//
+	// public String getServicePackage() {
+	// 	return servicePackage;
+	// }
+	//
+	// public void setServicePackage(String servicePackage) {
+	// 	this.servicePackage = servicePackage;
+	// }
+	//
+	// public String getServiceImplPackage() {
+	// 	return serviceImplPackage;
+	// }
+	//
+	// public void setServiceImplPackage(String serviceImplPackage) {
+	// 	this.serviceImplPackage = serviceImplPackage;
+	// }
+	//
+	// public String getEntityName() {
+	// 	return entityName;
+	// }
 }

@@ -11,9 +11,11 @@ import ${table.getServicePackage()}.${table.getEntityName()}Service;
 
 /**
  * ${table.getEntityName()}ServiceImpl ${table.getTableDesc()}
- * @author ${Author}
- * @version ${Version}
- * @date ${Date}
+ * @ClassName:   ${table.getEntityName()}ServiceImpl
+ * @Description: ${table.getTableDesc()}---服务表现层
+ * @author:      ${Author}
+ * @version:     ${Version}
+ * @date:        ${Date}
  */
  
  @Service

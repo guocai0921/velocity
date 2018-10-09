@@ -11,6 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="mybatis" target="1.5" />
+      <module name="pes-main-app" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

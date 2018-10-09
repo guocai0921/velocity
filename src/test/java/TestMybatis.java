@@ -3,6 +3,7 @@ import com.guocai.mp.mybatis.mapper.TableMapper;
 import com.guocai.mp.mybatis.util.Constants;
 import com.guocai.mp.mybatis.util.GeneratorUtil;
 import com.guocai.mp.mybatis.util.MapperMethodSwitch;
+import com.guocai.mp.mybatis.util.StringUtil;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -31,8 +32,8 @@ import java.util.Map;
 public class TestMybatis {
 
 	public static void main(String[] args) {
-		test("PES_","PES_PRO_FINISHING");
-
+		// testByMyCustomize("PES_","PES_MAT_MATERIAL","myClass.mat","MyMatMaterial");
+		test("PES_","PES_MAT_MATERIAL","物料实体类");
 	}
 
 	private MapperMethodSwitch methodSwitch = new MapperMethodSwitch();
@@ -45,7 +46,7 @@ public class TestMybatis {
 		this.methodSwitch = methodSwitch;
 	}
 
-	public static void test(String fileSurfixName,String tableName ){
+	public static void test(String fileSurfixName,String tableName,String tableDesc){
 		String resource = "mybatis-config.xml";
 		InputStream inputStream = null;
 		SqlSession session = null;
@@ -66,6 +67,9 @@ public class TestMybatis {
 				table.setTablePrefix(fileSurfixName);
 				table.setTableName(table.getTableName());
 				System.out.println("table--->" + table);
+				if (StringUtil.isNotEmpty(tableDesc)) {
+					table.setTableDesc(tableDesc);
+				}
 			}
 			TestMybatis myThis = new TestMybatis();
 			//String templateRelativePath = "ExtJsStoreTemplate.vm";
@@ -114,6 +118,86 @@ public class TestMybatis {
 		}
 
 	}
+
+// 	public static void testByMyCustomize(String fileSurfixName,String tableName,String myPath,String entiyName){
+// 		String resource = "mybatis-config.xml";
+// 		InputStream inputStream = null;
+// 		SqlSession session = null;
+// 		try {
+// 			inputStream = Resources.getResourceAsStream(resource);
+// 			SqlSessionFactory sqlSessionFactory =
+// 					new SqlSessionFactoryBuilder().build(inputStream);
+// 			System.out.println(sqlSessionFactory);
+// 			session = sqlSessionFactory.openSession();
+// 			TableMapper mapper = session.getMapper(TableMapper.class);
+// 			System.out.println("mapper = " + mapper);
+// 			Map<String,Object> map = new HashMap<String,Object>();
+//
+// 			map.put("tablePrefix",fileSurfixName);
+// 			map.put("tableName",tableName);
+// 			List<Table> tables = mapper.getTablesByPrefix(map);
+// 			for (Table table : tables) {
+// 				table.setTablePrefix(fileSurfixName);
+// 				table.setTableName(table.getTableName());
+// 				if(StringUtil.isNotEmpty(myPath)){
+// 					table.setEntityPackage("com.sgai."+myPath+".entity");
+// 					table.setControllerPackage("com.sgai."+myPath+".controller");
+// 					table.setServicePackage("com.sgai."+myPath+".service");
+// 					table.setJavaMapperPackage("com.sgai."+myPath+".mapper");
+// 					table.setXmlMapperPackage("com.sgai."+myPath+".mapper");
+// 					table.setServiceImplPackage("com.sgai."+myPath+".service.impl");
+//
+// 				}
+// 				table.setEntityName(entiyName);
+// 				System.out.println("table--->" + table);
+// 			}
+// 			TestMybatis myThis = new TestMybatis();
+// 			//String templateRelativePath = "ExtJsStoreTemplate.vm";
+//
+// 			/*String basePath = Constants.TARGET_BASE_PARTH + Constants.FILE_SEPERATOR +
+// 					Constants.JAVA_BASE_PATH + Constants.FILE_SEPERATOR;
+// 			VelocityContext velocityCtx = new VelocityContext();
+// 			velocityCtx.put("table", t);
+// 			velocityCtx.put("Author", Constants.AUTHOR);
+// 			velocityCtx.put("Version", Constants.VERSION);
+// 			velocityCtx.put("Date", Constants.GENERATE_DATE);
+// 			//生成ExtJs Store文件
+// 			String entityContent = GeneratorUtil.generate(velocityCtx, templateRelativePath);
+// 			System.out.println("entityContent = " + entityContent);
+// 			String path = basePath +  "store" + Constants.FILE_SEPERATOR +
+// 					t.getModuleName() + Constants.FILE_SEPERATOR +
+// 					t.getFirstLetterLowerEntityName() + Constants.FILE_SEPERATOR;
+// 			System.out.println("path = " + path);
+// 			String fileName = t.getEntityName() + "store";
+// 			System.out.println("fileName = " + fileName);
+// 			GeneratorUtil.writeFile(entityContent, path, fileName, true);*/
+// 			myThis.generateEntity(tables, "EntityTemplate.vm", ".java");
+// 			myThis.generateController(tables, "ControllerTemplate.vm", "Controller.java");
+// 			myThis.generateJavaMapper(tables, "MapperTemplate.vm",  "Mapper.java");
+// 			myThis.generateService(tables, "ServiceTemplate.vm", "Service.java");
+// 			myThis.generateServiceImpl(tables, "ServiceImplTemplate.vm", "ServiceImpl.java");
+// 			myThis.generateI18nTranslations(tables);
+// 			myThis.generateXMLMapper(tables, "XmlMapperTemplate.vm", "Mapper.xml");
+// //		this.generateGeneratorConfig(tables);
+// //		this.generatePackageInfo(tables);   ---struts2架构需要
+//
+// 			myThis.generateExtJsStore(tables, "ExtJsStoreTemplate.vm", "Store.js");
+// 			myThis.generateExtJsModel(tables, "ExtJsModelTemplate.vm", "Model.js");
+// 			myThis.generateExtJsView(tables, "ExtJsViewTemplate.vm", "View.js");
+// 			myThis.generateExtJsQueryForm(tables, "ExtJsQueryFormTemplate.vm", "QueryForm.js");
+// 			myThis.generateExtJsListGrid(tables, "ExtJsListGridTemplate.vm", "ListGrid.js");
+// 			myThis.generateExtJsViewController(tables, "ExtJsViewControllerTemplate.vm", "Controller.js");
+// 			myThis.generateExtJsWindow(tables, "ExtJsWindowTemplate.vm", "Win.js");
+// 			myThis.generateExtJsWinController(tables, "ExtJsWinViewControllerTemplate.vm", "WinController.js");
+//
+//
+// 		} catch (IOException e) {
+// 			e.printStackTrace();
+// 		} finally {
+// 			session.close();
+// 		}
+//
+// 	}
 
 
 	/**

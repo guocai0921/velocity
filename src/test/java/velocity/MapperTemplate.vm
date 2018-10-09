@@ -5,10 +5,11 @@ import com.sgai.core.base.repository.BaseRepository;
 import ${table.getEntityPackage()}.${table.getEntityName()};
 
 /**
- * ${table.getEntityName()}Mapper ${table.getTableDesc()}
- * @author ${Author}
- * @version ${Version}
- * @date ${Date}
+ * @ClassName:   ${table.getEntityName()}Mapper
+ * @Description: ${table.getTableDesc()}---数据访问层
+ * @author:      ${Author}
+ * @version:     ${Version}
+ * @date:        ${Date}
  */
  
 @BaseRepository

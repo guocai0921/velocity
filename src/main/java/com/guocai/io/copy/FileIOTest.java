@@ -1,5 +1,7 @@
 package com.guocai.io.copy;
 
+import org.junit.Test;
+
 import java.io.*;
 
 /**
@@ -34,6 +36,7 @@ public class FileIOTest {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        // 关闭连接
         } finally {
             if (bos!=null) {
                 try {
@@ -51,6 +54,28 @@ public class FileIOTest {
             }
             System.out.println("复制完成!!!");
         }
+    }
+
+    public static String getModuleName(String tableName, String tablePrefix) {
+        String moduleName = null;
+        if (tableName==null || tableName.trim().equals("")) return null;
+        tableName = tableName.replace(tablePrefix, "");
+        if (tableName.startsWith("_")) {
+            tableName = tableName.substring(1);
+        }
+        int indexOf_ = tableName.indexOf("_");
+        if(indexOf_>0){
+            moduleName = tableName.substring(0, indexOf_);
+        }else{
+            moduleName=tableName.substring(0,tablePrefix.length()-1);
+        }
+
+        return moduleName;
+    }
+
+    @Test
+    public void test(){
+        System.out.println(getModuleName("PES_PRO_FINISHING","PES_"));
     }
 
 }

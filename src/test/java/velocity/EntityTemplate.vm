@@ -7,11 +7,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * ${table.getEntityName()} ${table.getTableDesc()}
  * [table="${table.tableName}" | type="${table.tableType}]"
- * @author ${Author}
- * @version ${Version}
- * @date ${Date}
+ * @ClassName:   ${table.getEntityName()}
+ * @Description: ${table.getTableDesc()}
+ * @author:      ${Author}
+ * @version:     ${Version}
+ * @date:        ${Date}
  */
 public class ${table.getEntityName()} extends AbstractEntity {
 	private static Log logger = LogFactory.getLog(${table.getEntityName()} .class);
