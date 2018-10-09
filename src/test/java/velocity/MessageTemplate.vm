@@ -1,0 +1,4 @@
+
+#foreach($user in $users)
+    private $user.type $user.LowerField;
+#end
