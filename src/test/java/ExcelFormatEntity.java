@@ -24,10 +24,12 @@ public class ExcelFormatEntity {
 
     public static void main(String[] args) {
         format("E:\\formatExcel\\excel\\example-java-templates.xls","com.sgai.message.lg.qm");
-
-
     }
-
+    /**
+     * @Description: 封装转换方法
+     * @auther: Sun Guocai
+     *
+     */
     public static void format(String filePath,String packagePath) {
         File file = new File(filePath);
         List<Map> excelList = readExcel(file);
@@ -79,6 +81,10 @@ public class ExcelFormatEntity {
         System.out.println("list中的数据打印出来");
     }
 
+    /**
+     * @Description: 生成首字母大写字符
+     * @auther: Sun Guocai
+     */
     public static String  upperCaseField(String str) {
         String s = str.toLowerCase();
         String[] arr = s.split("_");
@@ -90,7 +96,10 @@ public class ExcelFormatEntity {
         }
         return sb.toString();
     }
-
+    /**
+     * @Description: 生成首字母小写字符
+     * @auther: Sun Guocai
+     */
     public static String  lowerCaseField(String str) {
         String s = str.toLowerCase();
         String[] arr = s.split("_");

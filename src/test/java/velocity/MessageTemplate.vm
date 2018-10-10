@@ -5,27 +5,26 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("$sheetName")
 public class $sheetName extends AbstractL4NMessage {
-
 private static final String messageTypeId = "$msgName";
 
-@Override
-public String getMessageTypeId() {
-return messageTypeId;
-}
-#foreach($user in $users)
-/**
-* $user.getContent()
-*/
-private $user.getType() $user.getLowerField();
-#end
+    @Override
+    public String getMessageTypeId() {
+        return messageTypeId;
+    }
+    #foreach($user in $users)
+    /**
+    * $user.getContent()
+    */
+    private $user.getType() $user.getLowerField();
+    #end
 
-#foreach($user in $users)
-public $user.getType() get$user.getUpperField()() {
-return $user.getLowerField();
-}
+    #foreach($user in $users)
+    public $user.getType() get$user.getUpperField()() {
+        return $user.getLowerField();
+    }
 
-public void set$user.getUpperField()()($user.type $user.getLowerField()) {
-this.$user.getLowerField() = $user.getLowerField();
-}
-#end
+    public void set$user.getUpperField()()($user.type $user.getLowerField()) {
+        this.$user.getLowerField() = $user.getLowerField();
+    }
+    #end
 }
