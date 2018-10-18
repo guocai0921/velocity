@@ -55,7 +55,16 @@ public class FileIOTest {
             System.out.println("复制完成!!!");
         }
     }
-
+    
+    
+    /**
+     * @description: 
+     * @auther: Sun GuoCai
+     * @datetime: 2018/10/18 13:36
+     * @param: tableName
+     * @param: tablePrefix  
+     * @return: java.lang.String
+     */
     public static String getModuleName(String tableName, String tablePrefix) {
         String moduleName = null;
         if (tableName==null || tableName.trim().equals("")) return null;
@@ -75,7 +84,7 @@ public class FileIOTest {
 
     @Test
     public void test(){
-        System.out.println(getModuleName("PES_PRO_FINISHING","PES_"));
+
     }
 
 }

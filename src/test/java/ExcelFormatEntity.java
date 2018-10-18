@@ -34,7 +34,9 @@ public class ExcelFormatEntity {
         File file = new File(filePath);
         List<Map> excelList = readExcel(file);
         for (Map map:excelList) {
-            String sheetName = (String) map.get("sheetName");
+            String totalName = (String) map.get("sheetName");
+            String sheetName = totalName.substring(0,totalName.indexOf("_"));
+            String comment = totalName.substring(totalName.indexOf("_")+1);
             List list = (List) map.get("list");
             System.out.println(sheetName);
             System.out.println(list);
@@ -66,13 +68,17 @@ public class ExcelFormatEntity {
                 }
                 System.out.println("user = " + user);
             }
-            String basePath = Constants.TARGET_BASE_PARTH + Constants.FILE_SEPERATOR +
-                    Constants.JAVA_BASE_PATH + Constants.FILE_SEPERATOR;
+            String basePath = Constants.TARGET_MESSAGE_BASE_PARTH + Constants.FILE_SEPERATOR +
+                    Constants.JAVA_MESSAGE_BASE_PATH + Constants.FILE_SEPERATOR;
             VelocityContext velocityCtx = new VelocityContext();
             velocityCtx.put("users", users);
             velocityCtx.put("packagePath", packagePath);
             velocityCtx.put("msgName", sheetName.substring(1));
             velocityCtx.put("sheetName", sheetName);
+            velocityCtx.put("comment", comment);
+            velocityCtx.put("Author", Constants.AUTHOR);
+            velocityCtx.put("Version", Constants.VERSION);
+            velocityCtx.put("Date", Constants.GENERATE_DATE);
             String entityContent = GeneratorUtil.generate(velocityCtx, "MessageTemplate.vm");
             String path = basePath  ;
             String fileName = sheetName+".java";
