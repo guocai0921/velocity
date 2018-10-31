@@ -52,12 +52,14 @@ public class JedisTest {
     @Test
     public void testJedisCluster(){
         Set<HostAndPort> nodes = new HashSet<HostAndPort>();
-        nodes.add(new HostAndPort("192.168.254.135", 6379));
-        nodes.add(new HostAndPort("192.168.254.135", 6380));
-        nodes.add(new HostAndPort("192.168.254.135", 6381));
-        nodes.add(new HostAndPort("192.168.254.135", 6382));
-        nodes.add(new HostAndPort("192.168.254.135", 6383));
-        nodes.add(new HostAndPort("192.168.254.135", 6384));
+        nodes.add(new HostAndPort("192.168.254.135", 7001));
+        nodes.add(new HostAndPort("192.168.254.135", 7002));
+        nodes.add(new HostAndPort("192.168.254.135", 7003));
+        nodes.add(new HostAndPort("192.168.254.135", 7004));
+        nodes.add(new HostAndPort("192.168.254.135", 7005));
+        nodes.add(new HostAndPort("192.168.254.135", 7006));
+        nodes.add(new HostAndPort("192.168.254.135", 7007));
+        nodes.add(new HostAndPort("192.168.254.135", 7008));
         JedisCluster cluster = new JedisCluster(nodes );
         cluster.set("key1", "1000");
         System.out.println(cluster.get("key1"));

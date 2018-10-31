@@ -159,7 +159,8 @@ public class FileIOTest {
         //         //.replaceAll("[\\s]","$");
         // System.out.println("newStr = " + newStr);
 
-        Instant inst1 = Instant.now();
+
+       Instant inst1 = Instant.now();
         for (int i=0;i<10;i++) {
             System.out.println("i = " + i);
 
@@ -169,9 +170,10 @@ public class FileIOTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Instant inst2 = Instant.now();
-        System.out.println("Difference in milliseconds : " + Duration.between(inst1, inst2).toMillis());
-        System.out.println("Difference in seconds : " + Duration.between(inst1, inst2).getSeconds());
+       Instant inst2 = Instant.now();
+       System.out.println("Difference in milliseconds : " + Duration.between(inst1, inst2).toMillis());
+       System.out.println("Difference in seconds : " + Duration.between(inst1, inst2).getSeconds());
+
 
     }
 

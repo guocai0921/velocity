@@ -26,12 +26,18 @@
                 <!--<property name="url" value="jdbc:oracle:thin:@//10.188.26.23:1521/rzdbt"/>
                 <property name="username" value="pestest"/>
                 <property name="password" value="pestest"/>-->
-               <!-- <property name="url" value="jdbc:oracle:thin:@//10.88.254.22:1521/lg2pes"/>
+                <property name="url" value="jdbc:oracle:thin:@//10.88.254.22:1521/lg2pes"/>
+                <property name="username" value="pes"/>
+                <property name="password" value="pes"/>
+                <!--<property name="url" value="jdbc:oracle:thin:@//10.3.247.209:1521/lgtestpes"/>
+                <property name="username" value="lgtestpes"/>
+                <property name="password" value="lgtestpes"/> -->
+                <!--<property name="url" value="jdbc:oracle:thin:@//10.188.26.39:1521/lg2dbt"/>
                 <property name="username" value="pes"/>
                 <property name="password" value="pes"/>-->
-                <property name="url" value="jdbc:oracle:thin:@//10.3.247.209:1521/lgtestpes"/>
-                <property name="username" value="lgtestpes"/>
-                <property name="password" value="lgtestpes"/>
+                <!--<property name="url" value="jdbc:oracle:thin:@//10.88.254.22:1521/lg2pes"/>
+                <property name="username" value="pes"/>
+                <property name="password" value="pes"/>-->
             </dataSource>
         </environment>
     </environments>
