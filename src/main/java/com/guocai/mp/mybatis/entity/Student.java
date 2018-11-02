@@ -13,12 +13,16 @@ package com.guocai.mp.mybatis.entity;
 public class Student {
     private String name;
     private Integer age;
+    private Integer score;
 
     public Student() {
     }
-    public Student(String name, Integer age) {
+
+    @java.beans.ConstructorProperties({"name", "age", "score"})
+    public Student(String name, Integer age, Integer score) {
         this.name = name;
         this.age = age;
+        this.score = score;
     }
 
     public String getName() {
@@ -29,12 +33,20 @@ public class Student {
         return this.age;
     }
 
+    public Integer getScore() {
+        return this.score;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
     public boolean equals(final Object o) {
@@ -48,6 +60,9 @@ public class Student {
         final Object this$age = this.getAge();
         final Object other$age = other.getAge();
         if (this$age == null ? other$age != null : !this$age.equals(other$age)) return false;
+        final Object this$score = this.getScore();
+        final Object other$score = other.getScore();
+        if (this$score == null ? other$score != null : !this$score.equals(other$score)) return false;
         return true;
     }
 
@@ -62,10 +77,12 @@ public class Student {
         result = result * PRIME + ($name == null ? 43 : $name.hashCode());
         final Object $age = this.getAge();
         result = result * PRIME + ($age == null ? 43 : $age.hashCode());
+        final Object $score = this.getScore();
+        result = result * PRIME + ($score == null ? 43 : $score.hashCode());
         return result;
     }
 
     public String toString() {
-        return "Student(name=" + this.getName() + ", age=" + this.getAge() + ")";
+        return "Student(name=" + this.getName() + ", age=" + this.getAge() + ", score=" + this.getScore() + ")";
     }
 }
