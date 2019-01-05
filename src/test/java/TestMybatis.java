@@ -33,14 +33,17 @@ public class TestMybatis {
 
 	public static void main(String[] args) {
 		// testByMyCustomize("PES_","PES_MAT_MATERIAL","myClass.mat","MyMatMaterial");
-		test("MES_","MES_WTM_WEIGHT_REQ","计量申请单实体类");
+		test("PES_","PES_PRO_BASK_RECORD","信息表");
 	}
 
-	private MapperMethodSwitch methodSwitch = new MapperMethodSwitch();
+	MapperMethodSwitch methodSwitch = new MapperMethodSwitch();
+
 
 	public MapperMethodSwitch getMethodSwitch() {
 		return methodSwitch;
 	}
+
+
 
 	public void setMethodSwitch(MapperMethodSwitch methodSwitch) {
 		this.methodSwitch = methodSwitch;
@@ -72,6 +75,7 @@ public class TestMybatis {
 				}
 			}
 			TestMybatis myThis = new TestMybatis();
+
 			//String templateRelativePath = "ExtJsStoreTemplate.vm";
 
 			/*String basePath = Constants.TARGET_BASE_PARTH + Constants.FILE_SEPERATOR +
@@ -96,11 +100,11 @@ public class TestMybatis {
 			myThis.generateJavaMapper(tables, "MapperTemplate.vm",  "Mapper.java");
 			myThis.generateService(tables, "ServiceTemplate.vm", "Service.java");
 			myThis.generateServiceImpl(tables, "ServiceImplTemplate.vm", "ServiceImpl.java");
-			myThis.generateI18nTranslations(tables);
 			myThis.generateXMLMapper(tables, "XmlMapperTemplate.vm", "Mapper.xml");
 //		this.generateGeneratorConfig(tables);
 //		this.generatePackageInfo(tables);   ---struts2架构需要
 
+			myThis.generateI18nTranslations(tables);
 			myThis.generateExtJsStore(tables, "ExtJsStoreTemplate.vm", "Store.js");
 			myThis.generateExtJsModel(tables, "ExtJsModelTemplate.vm", "Model.js");
 			myThis.generateExtJsView(tables, "ExtJsViewTemplate.vm", "View.js");
@@ -131,7 +135,7 @@ public class TestMybatis {
 // 			session = sqlSessionFactory.openSession();
 // 			TableMapper mapper = session.getMapper(TableMapper.class);
 // 			System.out.println("mapper = " + mapper);
-// 			Map<String,Object> map = new HashMap<String,Object>();
+// 			Map<String,Object> map = new HashMap.java<String,Object>();
 //
 // 			map.put("tablePrefix",fileSurfixName);
 // 			map.put("tableName",tableName);
@@ -310,16 +314,18 @@ public class TestMybatis {
 	 * @param tables
 	 */
 	private void generateI18nTranslations(List<Table> tables) {
+		String path = Constants.TARGET_BASE_PARTH + Constants.FILE_SEPERATOR +
+				Constants.WEB_APP_BASE + Constants.FILE_SEPERATOR + "translations";
+
 		VelocityContext velocityCtx = new VelocityContext();
 		velocityCtx.put("tables", tables);
 		velocityCtx.put("Author", Constants.AUTHOR);
 		velocityCtx.put("Version", Constants.VERSION);
 		velocityCtx.put("Date", Constants.GENERATE_DATE);
-		String path = Constants.TARGET_BASE_PARTH + Constants.FILE_SEPERATOR +
-				Constants.WEB_APP_BASE + Constants.FILE_SEPERATOR + "translations";
 		String entityContent = GeneratorUtil.generate(velocityCtx, "TranslationTemplate.vm");
-		String fileName = "business-lan-zh_CN.js";
+		String fileName = tables.get(0).getEntityName()+"_business-lan-zh_CN.js";
 		GeneratorUtil.writeFile(entityContent, path, fileName, true);
+
 	}
 	/**
 	 * 生成Mybatis XML Mapper

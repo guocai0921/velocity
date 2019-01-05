@@ -14,7 +14,7 @@ public class Constants {
 	public static String JAVA_MESSAGE_BASE_PATH="message";
 	public static String XML_MAPPER_BASE= "resources";
 	public static String WEB_APP_BASE="webapp";
-	public static String AUTHOR="Sun GuoCai";
+	public static String AUTHOR="PageGenerator";
 	public static String GENERATE_DATE=DateUtil.formatDate(new Date(), DateUtil.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss);
 	public static String VERSION="v1.0.0";
 	public static List<String> excludeClumns = new ArrayList<String>(){

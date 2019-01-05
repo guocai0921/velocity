@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sgai.dao.DbEntityDao">
+
+    <resultMap type="sgai.entity.DbEntity" id="DbEntityMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="dbDriverName" column="db_driver_name" jdbcType="VARCHAR"/>
+        <result property="dbHost" column="db_host" jdbcType="VARCHAR"/>
+        <result property="dbPort" column="db_port" jdbcType="VARCHAR"/>
+        <result property="dbSid" column="db_sid" jdbcType="VARCHAR"/>
+        <result property="dbDriver" column="db_driver" jdbcType="VARCHAR"/>
+        <result property="dbName" column="db_name" jdbcType="VARCHAR"/>
+        <result property="dbDesc" column="db_desc" jdbcType="VARCHAR"/>
+        <result property="dbUsername" column="db_username" jdbcType="VARCHAR"/>
+        <result property="dbPassword" column="db_password" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DbEntityMap">
+        select
+          id, db_driver_name, db_host, db_port, db_sid, db_driver, db_name, db_desc, db_username, db_password
+        from ssm.db_entity
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="DbEntityMap">
+        select
+          id, db_driver_name, db_host, db_port, db_sid, db_driver, db_name, db_desc, db_username, db_password
+        from ssm.db_entity
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DbEntityMap">
+        select
+          id, db_driver_name, db_host, db_port, db_sid, db_driver, db_name, db_desc, db_username, db_password
+        from ssm.db_entity
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="dbDriverName != null and dbDriverName != ''">
+                and db_driver_name = #{dbDriverName}
+            </if>
+            <if test="dbHost != null and dbHost != ''">
+                and db_host = #{dbHost}
+            </if>
+            <if test="dbPort != null and dbPort != ''">
+                and db_port = #{dbPort}
+            </if>
+            <if test="dbSid != null and dbSid != ''">
+                and db_sid = #{dbSid}
+            </if>
+            <if test="dbDriver != null and dbDriver != ''">
+                and db_driver = #{dbDriver}
+            </if>
+            <if test="dbName != null and dbName != ''">
+                and db_name = #{dbName}
+            </if>
+            <if test="dbDesc != null and dbDesc != ''">
+                and db_desc = #{dbDesc}
+            </if>
+            <if test="dbUsername != null and dbUsername != ''">
+                and db_username = #{dbUsername}
+            </if>
+            <if test="dbPassword != null and dbPassword != ''">
+                and db_password = #{dbPassword}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into ssm.db_entity(db_driver_name, db_host, db_port, db_sid, db_driver, db_name, db_desc, db_username, db_password)
+        values (#{dbDriverName}, #{dbHost}, #{dbPort}, #{dbSid}, #{dbDriver}, #{dbName}, #{dbDesc}, #{dbUsername}, #{dbPassword})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ssm.db_entity
+        <set>
+            <if test="dbDriverName != null and dbDriverName != ''">
+                db_driver_name = #{dbDriverName},
+            </if>
+            <if test="dbHost != null and dbHost != ''">
+                db_host = #{dbHost},
+            </if>
+            <if test="dbPort != null and dbPort != ''">
+                db_port = #{dbPort},
+            </if>
+            <if test="dbSid != null and dbSid != ''">
+                db_sid = #{dbSid},
+            </if>
+            <if test="dbDriver != null and dbDriver != ''">
+                db_driver = #{dbDriver},
+            </if>
+            <if test="dbName != null and dbName != ''">
+                db_name = #{dbName},
+            </if>
+            <if test="dbDesc != null and dbDesc != ''">
+                db_desc = #{dbDesc},
+            </if>
+            <if test="dbUsername != null and dbUsername != ''">
+                db_username = #{dbUsername},
+            </if>
+            <if test="dbPassword != null and dbPassword != ''">
+                db_password = #{dbPassword},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from ssm.db_entity where id = #{id}
+    </delete>
+
+</mapper>

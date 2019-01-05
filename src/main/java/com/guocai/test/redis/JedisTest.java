@@ -21,6 +21,16 @@ import java.util.Set;
  */
 public class JedisTest {
 
+    public static void main(String[] args){
+        User u  = new User("tom");
+        change(u);
+        System.out.println(u.getName());
+    }
+
+    public static void change(User u){
+        u.setName("rose");
+        u = new User("juery");
+    }
 
     @Test
     public void testJedisSingle() {

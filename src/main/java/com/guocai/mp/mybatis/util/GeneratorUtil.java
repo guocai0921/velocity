@@ -131,7 +131,7 @@ public class GeneratorUtil {
 				javaType = "Double";
 			} else {
 				if (col.getDataPrecision()==0 && col.getDataScale()==0) {
-					javaType = "BigDecimal";
+					javaType = "Integer";
 				} else if (col.getDataPrecision()>18) {
 					javaType = "BigDecimal";
 				} else if (col.getDataPrecision()>9) {
