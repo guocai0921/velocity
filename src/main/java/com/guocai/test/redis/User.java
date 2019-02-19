@@ -24,4 +24,15 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static void main(String[] args){
+        int a = 10;
+        for (;;) {
+            System.out.println("45 = " + a);
+            a++;
+            if (a == 20){
+                break;
+            }
+        }
+    }
 }

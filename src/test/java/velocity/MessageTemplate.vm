@@ -23,7 +23,7 @@ private static final String messageTypeId = "$msgName";
         return $user.getLowerField();
     }
 
-    public void set$user.getUpperField()()($user.type $user.getLowerField()) {
+    public void set$user.getUpperField()($user.type $user.getLowerField()) {
         this.$user.getLowerField() = $user.getLowerField();
     }
     #end

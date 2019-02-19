@@ -33,7 +33,7 @@ public class TestMybatis {
 
 	public static void main(String[] args) {
 		// testByMyCustomize("PES_","PES_MAT_MATERIAL","myClass.mat","MyMatMaterial");
-		test("PES_","PES_PRO_BASK_RECORD","信息表");
+		test("PES_","PES_QM_DEAL_RECORD","信息表");
 	}
 
 	MapperMethodSwitch methodSwitch = new MapperMethodSwitch();

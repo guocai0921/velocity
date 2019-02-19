@@ -55,7 +55,9 @@ public class ExcelFormatEntity {
                     }
 
                 }
-                users.add(user);
+                if (user.getName() != null) {
+                    users.add(user);
+                }
                 System.out.println();
             }
             for (User user : users) {
